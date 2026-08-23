@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Private School — Portal System</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c9a84c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alpha Portal">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="/assets/index-CT6pmMl9.css">
+</head>
+<body>
+
+<!-- ── FULLSCREEN INTRODUCTORY SPLASH OVERLAY (MONOLITH LIGHT SPLIT) ── -->
+<div id="introSplashOverlay" class="intro-splash-overlay play-gold">
+  <!-- Matching ambient backgrounds to blend seamlessly with main portal -->
+  <div class="bg-orbs" style="z-index: 0; opacity: 0.9;">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+  <div class="intro-flash" id="introSplashFlash"></div>
+  <div class="intro-monolith-container" id="introMonolithContainer">
+    <div class="monolith-wrap">
+      <div class="monolith-logo-slot">
+        <div class="monolith-logo-circle" style="width: 100px; height: 100px;">
+          <img class="monolith-logo" src="/assets/logo-Btyu2gdc.png" alt="logo.png" referrerPolicy="no-referrer">
+          <div class="monolith-logo-shimmer"></div>
+        </div>
+      </div>
+      <h1 class="monolith-title" style="font-size: 2.2rem; letter-spacing: 4px;">ALPHA PORTAL</h1>
+      <p class="monolith-sub" style="font-size: 0.8rem; letter-spacing: 10px;">RAS AL KHAIMAH</p>
+      <div class="monolith-crevice" style="margin-top: 32px; width: 220px;"></div>
+    </div>
+    
+    <button class="intro-enter-btn" onclick="dismissIntroSplash()">
+      <span>ENTER PORTAL</span>
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ── BACKGROUND ORBS ── -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<!-- ── MOBILE HAMBURGER + SIDEBAR OVERLAY ── -->
+<button class="sidebar-toggle-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ── MOBILE BOTTOM TAB BAR (glass floating pill) — Student/Teacher/Parent only ── -->
+<div class="profile-sheet-overlay" id="profileSheetOverlay"></div>
+<div class="profile-sheet" id="profileTabSheet"></div>
+<nav class="bottom-tab-bar" id="bottomTabBar" aria-label="Main navigation"></nav>
+
+<!-- ════════════════════════════════════════════
+     LOGIN
+════════════════════════════════════════════ -->
+<div id="loginSection" class="login-view">
+  <div class="glass-card login-card">
+    <div class="brand-wrap">
+      <div class="logo-ring">
+        <img class="school-logo" src="/assets/logo-Btyu2gdc.png" alt="logo.png" referrerPolicy="no-referrer">
+      </div>
+      <h1 class="school-name">ALPHA PRIVATE SCHOOL</h1>
+      <div class="school-tagline">RAS AL KHAIMAH · EST. EXCELLENCE</div>
+    </div>
+    <div class="field-wrap">
+      <label class="field-label">User ID (Portal ID / Student ID)</label>
+      <input id="uid" class="glass-input" type="text" autocomplete="off" placeholder="Enter your ID" onkeydown="if(event.key==='Enter') login()">
+    </div>
+    <div class="field-wrap">
+      <label class="field-label">Password</label>
+      <div style="position: relative; display: flex; align-items: center;">
+        <input id="pwd" class="glass-input" type="password" placeholder="••••••••" style="padding-right: 40px; margin: 0; width: 100%;" onkeydown="if(event.key==='Enter') login()">
+        <button type="button" id="togglePwdBtn" onclick="togglePasswordVisibility()" style="position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; opacity: 0.7; padding: 4px; display: flex; align-items: center; justify-content: center; color: currentColor;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+    </div>
+    <button class="glass-btn primary-btn" onclick="login()">
+      <span>Sign In to Portal</span>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div id="loginErrorMsg" style="color: #EF4444; text-align: center; font-size: 0.9rem; margin-top: 10px; display: none;"></div>
+    
+    <div class="login-footer">Secure institutional access only</div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     ADMIN SECTION
+════════════════════════════════════════════ -->
+<div id="adminSection" class="portal-root" style="display:none;">
+  <aside class="glass-sidebar">
+    <div class="sidebar-logo-mini">
+      <img src="/assets/logo-Btyu2gdc.png" alt="Alpha Private School Logo" class="school-logo" referrerPolicy="no-referrer">
+    </div>
+    <div class="sidebar-title">ALPHA ADMIN SYSTEM</div>
+    <div class="sidebar-badge admin-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      Admin Secure Mode
+    </div>
+    <ul class="sidebar-nav">
+      <li id="admTabBtnRegister"     class="nav-item active"  onclick="switchAdminTab('register')">      <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="17" y1="11" x2="23" y2="11"></line></svg></span> Register Account</li>
+      <li id="admTabBtnStudent"      class="nav-item"         onclick="switchAdminTab('student')">       <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg></span> Student Directory</li>
+      <li id="admTabBtnTeacher"      class="nav-item"         onclick="switchAdminTab('teacher')">       <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span> Teacher Roster</li>
+      <li id="admTabBtnAnnouncement" class="nav-item"         onclick="switchAdminTab('announcement')">  <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span> New Announcement</li>
+      <li id="admTabBtnSecurity"     class="nav-item"         onclick="switchAdminTab('security')">      <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span> Security & Backups</li>
+      <li id="admTabBtnNotification" class="nav-item" onclick="switchAdminTab('notification')">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span> Expiry Alerts <span id="admNotificationBadge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; margin-left: auto;">0</span>
+      </li>
+      <li id="admTabBtnOther" class="nav-item" onclick="switchAdminTab('other')">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span> Other
+      </li>
+    </ul>
+    <button id="admLogoutBtn" class="logout-btn" onclick="logoutSystem()"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg></span> Log Out</button>
+  </aside>
+
+  <main class="portal-main">
+
+    <!-- Register -->
+    <div id="admViewRegister" class="tab-view">
+      <div class="page-header">
+        <h2>Register New User</h2>
+        <p>Create a login for a new student, teacher, or parent.</p>
+      </div>
+      <div class="glass-panel">
+        <div class="form-group">
+          <label>Account Role Classification</label>
+          <select id="regRole" class="glass-input" onchange="toggleRegFields()">
+            <option value="student">Register Student</option>
+            <option value="teacher">Register Teacher</option>
+          </select>
+        </div>
+
+        <div id="studentFormFields">
+          <div class="form-group">
+            <label>Full Identity Name</label>
+            <input id="stdName" class="glass-input" type="text" placeholder="e.g., Ali Muhammad">
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Grade Level</label>
+              <select id="stdGrade" class="glass-input">
+                <option value="KG 1">KG 1</option><option value="KG 2">KG 2</option>
+                <option value="LKG">LKG</option><option value="UKG">UKG</option>
+                <option value="Grade 1">Grade 1</option><option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option><option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option><option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option>
+                <option value="Grade 9">Grade 9</option><option value="Grade 10" selected>Grade 10</option>
+                <option value="Grade 11">Grade 11</option><option value="Grade 12">Grade 12</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Section</label>
+              <select id="stdSection" class="glass-input">
+                <option value="Section A">Section A</option>
+                <option value="Section B">Section B</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Student Registration Number</label>
+              <input id="stdRoll" class="glass-input" type="text" placeholder="e.g., REG-1024">
+            </div>
+            <div class="form-group">
+              <label>House Allocation</label>
+              <select id="stdHouse" class="glass-input">
+                <option value="Red House">Red House</option>
+                <option value="Blue House">Blue House</option>
+                <option value="Green House">Green House</option>
+              </select>
+            </div>
+            
+            <!-- Child Personal & Dynamic Identification Cards (Required Above Parent details) -->
+            <div class="form-group">
+              <label>Child's Date of Birth</label>
+              <input id="stdDoB" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Joining Date of Child</label>
+              <input id="stdJoiningDate" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Child's Emirates ID</label>
+              <input id="stdEmiratesId" class="glass-input" type="text" placeholder="e.g., 784-2016-XXXXXXX-X">
+            </div>
+            <div class="form-group">
+              <label>Child's Passport Number</label>
+              <input id="stdPassport" class="glass-input" type="text" placeholder="e.g., EPXXXXXX">
+            </div>
+            <div class="form-group">
+              <label>Child's Emirates ID Expire Date</label>
+              <input id="stdEmiratesExp" class="glass-input" type="date">
+            </div>
+
+
+            <!-- Parents Identity Cards & Contact Details -->
+            <div class="form-group">
+              <label>Father's Full Name</label>
+              <input id="stdFather" class="glass-input" type="text" placeholder="Father's name">
+            </div>
+            <div class="form-group">
+              <label>Mother's Full Name</label>
+              <input id="stdMother" class="glass-input" type="text" placeholder="Mother's name">
+            </div>
+            <div class="form-group">
+              <label>Father's Contact</label>
+              <input id="stdFContact" class="glass-input" type="text" placeholder="+97150...">
+            </div>
+            <div class="form-group">
+              <label>Mother's Contact</label>
+              <input id="stdMContact" class="glass-input" type="text" placeholder="+97152...">
+            </div>
+            <div class="form-group">
+              <label>Father's Emirates ID</label>
+              <input id="stdFEmiratesId" class="glass-input" type="text" placeholder="e.g., 784-1980-XXXXXXX-X">
+            </div>
+            <div class="form-group">
+              <label>Mother's Emirates ID</label>
+              <input id="stdMEmiratesId" class="glass-input" type="text" placeholder="e.g., 784-1985-XXXXXXX-X">
+            </div>
+            <div class="form-group">
+              <label>Father's Emirates ID Expire Date</label>
+              <input id="stdFEmiratesExp" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Mother's Emirates ID Expire Date</label>
+              <input id="stdMEmiratesExp" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Father's Passport Number</label>
+              <input id="stdFPassport" class="glass-input" type="text" placeholder="Father's passport number">
+            </div>
+            <div class="form-group">
+              <label>Mother's Passport Number</label>
+              <input id="stdMPassport" class="glass-input" type="text" placeholder="Mother's passport number">
+            </div>
+            <div class="form-group">
+              <label>Father's Date of Birth</label>
+              <input id="stdFDoB" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Mother's Date of Birth</label>
+              <input id="stdMDoB" class="glass-input" type="date">
+            </div>
+            <div class="form-group grid-full">
+              <label>Set Custom Password for Portal Login</label>
+              <input id="stdPassword" class="glass-input" type="text" value="alphastudent12345">
+            </div>
+          </div>
+        </div>
+
+        <div id="teacherFormFields" style="display:none;">
+          <div class="form-grid-2" style="margin: 0;">
+            <div class="form-group">
+              <label>Full Instructor Identity Name</label>
+              <input id="tchName" class="glass-input" type="text" placeholder="e.g., Jobi Ma'am">
+            </div>
+            <div class="form-group">
+              <label>Subject Specialization Department</label>
+              <select id="tchSubject" class="glass-input">
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Biology">Biology</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Information Practices">Information Practices</option>
+                <option value="MSCS">MSCS</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Social Science">Social Science</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Emirates ID</label>
+              <input id="tchEmiratesId" class="glass-input" type="text" placeholder="e.g., 784-XXXX-XXXXXXX-X">
+            </div>
+            <div class="form-group">
+              <label>Emirates ID Expire Date</label>
+              <input id="tchEmiratesExp" class="glass-input" type="date">
+            </div>
+            <div class="form-group">
+              <label>Passport Number</label>
+              <input id="tchPassport" class="glass-input" type="text" placeholder="e.g., EPXXXXXX">
+            </div>
+            <div class="form-group">
+              <label>Qualification</label>
+              <input id="tchQualification" class="glass-input" type="text" placeholder="e.g., M.Sc. B.Ed.">
+            </div>
+            <div class="form-group grid-full" style="grid-column: 1 / -1;">
+              <label>Set Custom Password for Portal Login</label>
+              <input id="tchPassword" class="glass-input" type="text" value="alphateacher12345">
+            </div>
+            <div class="form-group grid-full" style="grid-column: 1 / -1;">
+              <label style="margin-bottom: 8px; display: block;">Assigned Grade Levels (Grades to Teach)</label>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="LKG"> LKG</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="UKG"> UKG</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 1"> Grade 1</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 2"> Grade 2</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 3"> Grade 3</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 4"> Grade 4</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 5"> Grade 5</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 6"> Grade 6</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 7"> Grade 7</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 8"> Grade 8</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 9"> Grade 9</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 10" checked> Grade 10</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 11"> Grade 11</label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" name="tchGrades" value="Grade 12"> Grade 12</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="glass-btn primary-btn" onclick="executeRegistration()" style="margin-top:8px;">
+          <span>Compile and Register Profile</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Student Directory -->
+    <div id="admViewStudent" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Student Directory</h2>
+        <p>Browse all enrolled students. Click a student card to manage their account.</p>
+      </div>
+      <div class="glass-panel" style="max-width:100%; margin-bottom:20px;">
+        <div class="form-grid-2" style="margin:0;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Select Grade</label>
+            <select id="filterGrade" class="glass-input" onchange="renderStudentMatrix()">
+              <option value="LKG">LKG</option><option value="UKG">UKG</option>
+              <option value="Grade 1">Grade 1</option><option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option><option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option><option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option><option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 11">Grade 11</option><option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Select Section</label>
+            <select id="filterSection" class="glass-input" onchange="renderStudentMatrix()">
+              <option value="Section A">Section A</option>
+              <option value="Section B">Section B</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="house-row">
+        <div class="glass-house-col red-house">
+          <div class="house-badge badge-red">🔴 RED HOUSE</div>
+          <div id="houseRedContainer"><div class="empty-state">Empty House</div></div>
+        </div>
+        <div class="glass-house-col blue-house">
+          <div class="house-badge badge-blue">🔵 BLUE HOUSE</div>
+          <div id="houseBlueContainer"><div class="empty-state">Empty House</div></div>
+        </div>
+        <div class="glass-house-col green-house">
+          <div class="house-badge badge-green">🟢 GREEN HOUSE</div>
+          <div id="houseGreenContainer"><div class="empty-state">Empty House</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher Roster -->
+    <div id="admViewTeacher" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Teacher Roster</h2>
+        <p>List of all registered teachers. Click a row to view their profile.</p>
+      </div>
+      <div class="glass-table-wrap">
+        <table class="glass-table">
+          <thead><tr><th>Teacher ID</th><th>Teacher Name</th><th>Department</th></tr></thead>
+          <tbody id="teacherTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Announcement -->
+    <div id="admViewAnnouncement" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Announcements</h2>
+        <p>Post an announcement visible to everyone across the school.</p>
+      </div>
+      <div class="glass-panel">
+        <div class="form-group">
+          <label>Announcement Title</label>
+          <input id="annTitle" class="glass-input" type="text" placeholder="e.g., Term Examination Schedule">
+        </div>
+        <div class="form-group">
+          <label>Description Content</label>
+          <textarea id="annDesc" class="glass-input" rows="5" placeholder="Draft notice here..." style="resize:none;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Attach Media Image Asset</label>
+          <input id="annImage" class="glass-input" type="file" accept="image/*" onchange="previewImage(event)">
+          <img id="annImgPreview" class="file-preview" alt="Attachment preview">
+        </div>
+        <button class="glass-btn primary-btn" onclick="executeAnnouncement()">
+          <span>Broadcast Announcement</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Security & Backups -->
+    <div id="admViewSecurity" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Security &amp; Backups</h2>
+        <p>System protections, audit history, and data recovery.</p>
+      </div>
+
+      <div class="admin-stats-row">
+        <div class="admin-stat-card glass-panel status-good">
+          <div class="admin-stat-label">Password Storage</div>
+          <div class="admin-stat-value">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Salted &amp; Hashed
+          </div>
+        </div>
+        <div class="admin-stat-card glass-panel status-info">
+          <div class="admin-stat-label">Access Control</div>
+          <div class="admin-stat-value">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Role-Based
+          </div>
+        </div>
+        <div class="admin-stat-card glass-panel status-warn">
+          <div class="admin-stat-label">Login Protection</div>
+          <div class="admin-stat-value">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Lockout After 5 Attempts
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-panel-grid-2">
+        <!-- Left panel: Backups and Actions -->
+        <div class="glass-panel">
+          <h3 class="admin-panel-title"><span>💾</span> Database Backups &amp; Recovery</h3>
+          <p class="admin-panel-subtitle">Download a full copy of your school's data, or restore from a previous backup at any time.</p>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <button class="glass-btn primary-btn" style="width: 100%; justify-content: center;" onclick="downloadDatabaseBackup()">
+              <span>📥 Download Backup (.json)</span>
+            </button>
+          </div>
+
+          <hr class="admin-divider">
+
+          <div class="form-group">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Restore from a Backup File</label>
+            <input id="securityBackupFile" class="glass-input" type="file" accept=".json" style="margin-bottom: 1rem;">
+            <button class="glass-btn secondary-btn" style="width: 100%; justify-content: center; background: rgba(220, 38, 38, 0.2); border-color: rgba(220, 38, 38, 0.4);" onclick="restoreDatabaseBackup()">
+              <span>📤 Restore from File</span>
+            </button>
+          </div>
+
+          <hr class="admin-divider">
+
+          <div class="form-group">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Automatic Backups</label>
+            <p class="admin-panel-subtitle" style="margin-bottom: 0.75rem;">The app snapshots your data automatically. Restore instantly from any of the last few snapshots — no file needed.</p>
+            <div id="autoBackupList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+        </div>
+
+        <!-- Right panel: System Lockouts & Policy -->
+        <div class="glass-panel">
+          <h3 class="admin-panel-title"><span>🔒</span> Login &amp; Session Policy</h3>
+          <div>
+            <div class="admin-info-row">
+              <span>Failed Attempt Lockout Limit</span>
+              <span class="admin-info-value bad">5 Attempts</span>
+            </div>
+            <div class="admin-info-row">
+              <span>Temporary Lockout Duration</span>
+              <span class="admin-info-value bad">30 Seconds</span>
+            </div>
+            <div class="admin-info-row">
+              <span>Administrator 2FA</span>
+              <span class="admin-info-value bad">Not Set Up</span>
+            </div>
+          </div>
+
+          <hr class="admin-divider" style="margin: 1.5rem 0 1rem 0;">
+          <h3 class="admin-panel-title" style="color: var(--gold-light);"><span>🔐</span> Change Administrator Password</h3>
+          <p class="admin-panel-subtitle" style="margin-bottom: 1rem;">Update your admin login credentials below.</p>
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">New Admin Password</label>
+            <input id="admNewPassword" class="glass-input" type="password" placeholder="Enter new admin password..." style="padding: 10px; font-size: 0.85rem;">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">Confirm Password</label>
+            <input id="admConfirmPassword" class="glass-input" type="password" placeholder="Confirm new admin password..." style="padding: 10px; font-size: 0.85rem;">
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.6rem 1rem;" onclick="changeAdminPassword()">
+            Update Admin Password
+          </button>
+        </div>
+      </div>
+
+      <!-- Audit Logs -->
+      <div class="glass-panel">
+        <div class="admin-header-row" style="margin-bottom: 1rem;">
+          <h3 class="admin-panel-title" style="margin: 0;"><span>📜</span> Security Audit Log</h3>
+          <button class="glass-btn secondary-btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="clearSecurityAuditLogs()">
+            Clear History
+          </button>
+        </div>
+
+        <div class="admin-table-wrap scrollable">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Actor (Role)</th>
+                <th>Event</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="securityAuditLogTableBody">
+              <!-- Rendered Dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expiry Notifications View -->
+    <div id="admViewNotification" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Expiry Alerts</h2>
+        <p>Documents and records that are expiring soon or have already expired.</p>
+      </div>
+
+      <div id="notificationSummaryBanner" class="admin-status-banner glass-panel status-bad">
+        <div>
+          <h3 id="notificationSummaryTitle">Active Expiry Alerts</h3>
+          <p id="notificationSummaryDesc">Checking student and parent records...</p>
+        </div>
+        <div class="admin-status-icon status-bad">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <h3 class="admin-panel-title">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold-light);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          All Expiry Alerts
+        </h3>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Registration No.</th>
+                <th>Grade/Sec</th>
+                <th>Document Holder</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th style="text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="notificationTableBody">
+              <!-- Rendered Dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other (reached via the "Other" sidebar nav item) -->
+    <div id="admViewOther" class="tab-view" style="display:none;">
+      <div class="page-header">
+        <h2>Other Admin Tools</h2>
+        <p>Additional administrative controls.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;">
+        <div class="admin-option-card glass-panel" onclick="switchAdminTab('attendanceControl')">
+          <div class="admin-option-icon">🕐</div>
+          <h3>Attendance</h3>
+          <p>Start, pause, or freeze school-wide attendance marking.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Control (reached via Other > Attendance) -->
+    <div id="admViewAttendanceControl" class="tab-view" style="display:none;">
+      <div class="page-header admin-header-row">
+        <div>
+          <h2>School-Wide Attendance Control</h2>
+          <p>Start or freeze attendance marking across the entire school.</p>
+        </div>
+        <button class="glass-btn secondary-btn" onclick="switchAdminTab('other')" style="padding: 8px 16px;"><span>← Back to Other</span></button>
+      </div>
+
+      <div id="admAttControlStatusBanner" class="admin-status-banner glass-panel">
+        <div>
+          <h3 id="admAttControlStatusTitle">—</h3>
+          <p id="admAttControlStatusDesc">—</p>
+        </div>
+        <div id="admAttControlStatusIcon" class="admin-status-icon">—</div>
+      </div>
+
+      <div class="glass-panel" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button id="admAttControlStartBtn" class="glass-btn primary-btn" onclick="adminResumeAttendance()" style="padding: 10px 20px;">
+            <span>▶️ Start / Resume Attendance</span>
+          </button>
+          <button id="admAttControlFreezeBtn" class="glass-btn secondary-btn" onclick="adminFreezeAttendance()" style="padding: 10px 20px; border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.08); color: #ff9d9d;">
+            <span>⏸️ Freeze / Pause Attendance</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <h3 class="admin-panel-title">Freeze / Resume History</h3>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>By</th>
+              </tr>
+            </thead>
+            <tbody id="admAttControlHistoryBody">
+              <!-- Rendered Dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div id="teacherSection" class="portal-root" style="display:none;">
+  <aside class="glass-sidebar">
+    <div class="sidebar-logo-mini">
+      <img src="/assets/logo-Btyu2gdc.png" alt="Alpha Private School Logo" class="school-logo" referrerPolicy="no-referrer">
+    </div>
+    <div class="sidebar-title">ALPHA TEACHER PORTAL</div>
+    <div id="teacherNameDisplayBadge" class="sidebar-badge teacher-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      Instructor Panel
+    </div>
+    <ul class="sidebar-nav">
+      <li id="tchTabBtnMaterials" class="nav-item active" onclick="switchTeacherTab('materials')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span> Home Assignment</li>
+      <li id="tchTabBtnHomework"  class="nav-item"        onclick="switchTeacherTab('homework')"> <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span> Upload Homework</li>
+      <li id="tchTabBtnReports"   class="nav-item"        onclick="switchTeacherTab('reports')">  <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> Post Report Cards</li>
+      <li id="tchTabBtnAttendance" class="nav-item"       onclick="switchTeacherTab('attendance')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> Attendance Sheet</li>
+      <li id="tchTabBtnChat"      class="nav-item"        onclick="switchTeacherTab('chat')">     <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span> Chat Box</li>
+      <li id="tchTabBtnMyWork" class="nav-item mobile-only-nav-item" onclick="switchTeacherTab('mywork')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span> My Work</li>
+      <li id="tchTabBtnMyProfile" class="nav-item mobile-only-nav-item" onclick="switchTeacherTab('myprofile')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> My Profile</li>
+    </ul>
+    <button id="tchLogoutBtn" class="logout-btn" onclick="logoutSystem()"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg></span> Log Out</button>
+  </aside>
+
+  <main class="portal-main">
+    <div id="tchEmergencyBannerContainer" class="emergency-banner-slot"></div>
+
+    <!-- Home Assignment -->
+    <div id="tchViewMaterials" class="teacher-tab-panel">
+      <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Home Assignment Portal</h2>
+        <p>Create subjects, chapters, and publish home assignments for students.</p>
+      </div>
+      <div class="glass-panel">
+        <div class="form-grid-2" style="margin-bottom:8px;">
+          <div class="form-group">
+            <label>Target Grade Level Stream</label>
+            <select id="tchMatGrade" class="glass-input" onchange="onTeacherAssignmentParamChange()">
+              <option value="LKG">LKG</option><option value="UKG">UKG</option>
+              <option value="Grade 1">Grade 1</option><option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option><option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option><option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option><option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 11">Grade 11</option><option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Target Classroom Section</label>
+            <select id="tchMatSection" class="glass-input" onchange="onTeacherAssignmentParamChange()">
+              <option value="Section A">Section A</option>
+              <option value="Section B">Section B</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dynamic Workspace for Subjects, Chapters, and Assignments -->
+        <div id="tchAssignmentDynamicContainer"></div>
+      </div>
+    </div>
+
+    <!-- Upload Homework -->
+    <div id="tchViewHomework" class="teacher-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Assign Homework &amp; Term Tasks Workspace</h2>
+        <p>Write assignments mapped directly to target classrooms.</p>
+      </div>
+      <div class="glass-panel">
+        <div class="form-grid-2" style="margin-bottom:8px;">
+          <div class="form-group">
+            <label>Target Grade Stream</label>
+            <select id="tchHomGrade" class="glass-input" onchange="renderClassGroupChatForTeacher()">
+              <option value="LKG">LKG</option><option value="UKG">UKG</option>
+              <option value="Grade 1">Grade 1</option><option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option><option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option><option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option><option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 11">Grade 11</option><option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Target Classroom Section</label>
+            <select id="tchHomSection" class="glass-input" onchange="renderClassGroupChatForTeacher()">
+              <option value="Section A">Section A</option>
+              <option value="Section B">Section B</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Task Instructions / Question Text Assignment</label>
+          <textarea id="tchHomText" class="glass-input" rows="4" placeholder="Type prompt requirements here..." style="resize:none;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Optional Illustration Worksheet Image (From Laptop)</label>
+          <input id="tchHomImage" class="glass-input" type="file" accept="image/*">
+        </div>
+        <button class="glass-btn primary-btn" onclick="uploadHomeworkAction()"><span>Publish Homework Block</span></button>
+      </div>
+
+      <!-- Class Group Chat — same grade/section pickers above decide which class you're viewing -->
+      <div class="glass-panel" style="margin-top:1.5rem;">
+        <h3 style="margin-top:0; margin-bottom:0.4rem; font-size:1.05rem; color:var(--gold-light); display:flex; align-items:center; gap:0.5rem;">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Class Group Chat
+        </h3>
+        <p id="tchClassChatSubtitle" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;"></p>
+        <div id="tchClassChatParticipants" class="class-chat-participants"></div>
+        <div id="tchClassChatMessagesBox" class="chat-messages" style="max-height:360px; min-height:180px; border-radius:12px; background:rgba(0,0,0,0.15);"></div>
+        <div class="chat-input-bar" style="border-top:none; padding:12px 0 0; background:transparent;">
+          <input id="tchClassChatInput" class="chat-text-input" type="text" placeholder="Message the class..." onkeydown="if(event.key==='Enter') sendClassChatMessageAsTeacher()">
+          <button class="chat-send-btn" onclick="sendClassChatMessageAsTeacher()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post Report Cards -->
+    <div id="tchViewReports" class="teacher-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Academic Performance Assessment Card Roster</h2>
+        <p>Select a student profile and upload their evaluation card records.</p>
+      </div>
+      <div class="glass-panel">
+        <div class="form-grid-2" style="margin-bottom:8px;">
+          <div class="form-group">
+            <label>Step 1: Select Student Grade</label>
+            <select id="tchRepGrade" class="glass-input" onchange="loadTeacherReportStudentsDropdown()">
+              <option value="LKG">LKG</option><option value="UKG">UKG</option>
+              <option value="Grade 1">Grade 1</option><option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option><option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option><option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option><option value="Grade 10" selected>Grade 10</option>
+              <option value="Grade 11">Grade 11</option><option value="Grade 12">Grade 12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Step 2: Choose Section</label>
+            <select id="tchRepSection" class="glass-input" onchange="loadTeacherReportStudentsDropdown()">
+              <option value="Section A">Section A</option>
+              <option value="Section B">Section B</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Step 3: Select Student Profile</label>
+          <select id="tchRepStudentSelect" class="glass-input">
+            <option value="">-- Choose Student Profile Identity --</option>
+          </select>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label>Academic Evaluation Term</label>
+            <select id="tchRepTerm" class="glass-input">
+              <option value="Term 1">Term 1</option>
+              <option value="Term 2">Term 2</option>
+              <option value="Term 3">Term 3</option>
+              <option value="Annual Exam">Annual Exam</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Upload Report Card Document / Image</label>
+            <input id="tchRepFile" class="glass-input" type="file" accept="application/pdf,.doc,.docx,image/*">
+          </div>
+        </div>
+        <button class="glass-btn primary-btn" onclick="uploadReportCardAction()"><span>Submit Secure Performance Card</span></button>
+      </div>
+    </div>
+
+    <!-- Faculty Chat -->
+    <div id="tchViewChat" class="teacher-tab-panel chat-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Chat Box</h2>
+        <p>Communicate seamlessly with registered students messaging your active workstation.</p>
+      </div>
+      <div class="chat-workspace">
+        <div class="chat-contacts-pane">
+          <div class="contacts-header">
+            <h3>Student Identity Conversations</h3>
+            <p>Select an active profile thread</p>
+          </div>
+          <div id="teacherChatStudentsList" class="contacts-list"></div>
+        </div>
+        <div id="teacherChatMessagingPane" class="chat-pane">
+          <div class="chat-empty">
+            <span><svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-secondary); opacity:0.6;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+            <p>No Chat Conversation Node Selected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Work (mobile hub: Home Assignment + Homework + Attendance) -->
+    <div id="tchViewMyWork" class="teacher-tab-panel mobile-only-nav-item" style="display:none;">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg">My Work</h2>
+      </div>
+      <div class="glass-panel" style="padding:8px; max-width:600px;">
+        <button class="profile-menu-row" onclick="switchTeacherTab('materials')">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+          <span class="profile-menu-label">Home Assignment</span>
+          <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+        </button>
+        <button class="profile-menu-row" onclick="switchTeacherTab('homework')">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span>
+          <span class="profile-menu-label">Assign Homework & Term Tasks</span>
+          <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+        </button>
+        <button class="profile-menu-row" onclick="switchTeacherTab('reports')">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
+          <span class="profile-menu-label">Post Report Cards</span>
+          <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+        </button>
+        <button class="profile-menu-row" onclick="switchTeacherTab('attendance')" style="border-bottom:none;">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+          <span class="profile-menu-label">Student Attendance Register</span>
+          <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- My Profile (mobile: replaces Logout tab) -->
+    <div id="tchViewMyProfile" class="teacher-tab-panel mobile-only-nav-item" style="display:none;">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg">My Profile</h2>
+      </div>
+
+      <div id="tchProfileMenuView" style="max-width:600px;">
+        <div class="glass-panel" style="padding:8px;">
+          <button class="profile-menu-row" onclick="showTeacherProfileSubview('personal')">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+            <span class="profile-menu-label">Personal Information</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+          <button class="profile-menu-row" onclick="showTeacherProfileSubview('password')" style="border-bottom:none;">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+            <span class="profile-menu-label">Password Management</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+        </div>
+
+        <button class="glass-btn" style="width:100%; justify-content:center; padding:0.85rem 1rem; margin-top:1.25rem; border-color: rgba(255,90,90,0.3); color:#ff8080;" onclick="logoutSystem()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:-3px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
+          Log Out
+        </button>
+      </div>
+
+      <div id="tchProfilePersonalInfoView" style="max-width:600px; display:none;">
+        <button class="profile-subpage-back" onclick="showTeacherProfileSubview('menu')">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          Back to Profile
+        </button>
+        <div class="glass-panel">
+          <div id="teacherMyProfileCardDetails" class="info-grid"></div>
+        </div>
+      </div>
+
+      <div id="tchProfilePasswordView" style="max-width:600px; display:none;">
+        <button class="profile-subpage-back" onclick="showTeacherProfileSubview('menu')">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          Back to Profile
+        </button>
+        <div class="glass-panel">
+          <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--gold-light);">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Change Portal Password
+          </h3>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">Update your teacher portal login credential. Keep it secure.</p>
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">New Password</label>
+            <input id="tchNewPassword" class="glass-input" type="password" placeholder="Enter new password...">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">Confirm Password</label>
+            <input id="tchConfirmPassword" class="glass-input" type="password" placeholder="Confirm new password...">
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.6rem 1rem;" onclick="changeTeacherPassword()">
+            Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Tracker -->
+    <div id="tchViewAttendance" class="teacher-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2 id="attViewTitle">Student Attendance Register</h2>
+        <p id="attViewDesc">Select a class to take or review attendance.</p>
+      </div>
+
+      <!-- Class Selection -->
+      <div id="attClassView" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+        <!-- Dynamically populated in app.js -->
+      </div>
+
+      <!-- Section Selection -->
+      <div id="attSectionView" style="display: none; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+        <!-- Dynamically populated in app.js -->
+      </div>
+
+      <!-- Monthly Attendance Grid -->
+      <div id="attGridView" class="glass-panel" style="display:none; flex-direction:column; padding: 1.5rem; border-radius: 16px;">
+
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="glass-btn secondary-btn" onclick="changeGridMonth(-1)" title="Previous month" aria-label="Previous month" style="padding: 8px 12px;">⬅️</button>
+            <span id="attGridMonthLabel" style="font-weight: 700; color: var(--gold-light); min-width: 150px; text-align: center; display: inline-block;">—</span>
+            <button class="glass-btn secondary-btn" id="attGridNextBtn" onclick="changeGridMonth(1)" title="Next month" aria-label="Next month" style="padding: 8px 12px;">➡️</button>
+            <button class="glass-btn secondary-btn" onclick="jumpGridToThisMonth()" style="padding: 8px 14px;">This Month</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="glass-btn secondary-btn" id="attGridUndoBtn" onclick="undoLastAttendanceChange()" disabled title="Undo the last attendance click" aria-label="Undo the last attendance change" style="padding: 8px 14px;">
+              <span>↩️ Undo</span>
+            </button>
+            <button class="glass-btn secondary-btn" onclick="openAttendanceResetModal()" style="padding: 8px 14px; border-color: rgba(255, 75, 75, 0.3); background: rgba(255, 75, 75, 0.05); color: #ff8888;" onmouseover="this.style.background='rgba(255, 75, 75, 0.15)'" onmouseout="this.style.background='rgba(255, 75, 75, 0.05)'">
+              <span>🗑️ Clear This Month</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; font-size: 0.78rem;">
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; border-radius:3px; background:#22c55e; display:inline-block;"></span> Present</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; border-radius:3px; border: 1px solid rgba(239,68,68,0.6); background:rgba(239,68,68,0.15); display:inline-block;"></span> Absent</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:14px; border-radius:3px; border: 1px dashed rgba(255,255,255,0.25); display:inline-block;"></span> Not marked yet</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="opacity:0.6;">•</span> Weekend / off day</div>
+        </div>
+
+        <div id="attGridTableContainer" style="flex:1; overflow: auto; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; max-height: 70vh;">
+          <!-- Dynamically populated in app.js: the checkbox grid table -->
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════
+     STUDENT SECTION
+════════════════════════════════════════════ -->
+<div id="studentSection" class="portal-root" style="display:none;">
+  <aside class="glass-sidebar">
+    <div class="sidebar-logo-mini">
+      <img src="/assets/logo-Btyu2gdc.png" alt="Alpha Private School Logo" class="school-logo" referrerPolicy="no-referrer">
+    </div>
+    <div class="sidebar-title">ALPHA PORTAL</div>
+    <div id="studentProfileNameDisplayBadge" class="sidebar-badge student-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg>
+      Student View
+    </div>
+    <ul class="sidebar-nav">
+      <li id="stdTabBtnAnn"  class="nav-item active" onclick="switchStudentTab('annancements')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M16 8h2m-2 4h2M6 8h6v8H6z"></path></svg></span> Announcements</li>
+      <li id="stdTabBtnChat" class="nav-item"         onclick="switchStudentTab('chat')">        <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span> Faculty Chat Box</li>
+      <li id="stdTabBtnMat"  class="nav-item"         onclick="switchStudentTab('materials')">   <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span> Home Assignment</li>
+      <li id="stdTabBtnRep"  class="nav-item"         onclick="switchStudentTab('reports')">     <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> Report Cards</li>
+      <li id="stdTabBtnAtt"  class="nav-item"         onclick="switchStudentTab('attendance')">  <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> Attendance Rate</li>
+      <li id="stdTabBtnMe"    class="nav-item"         onclick="switchStudentTab('me')">          <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> My Profile</li>
+    </ul>
+    <button id="stdLogoutBtn" class="logout-btn" onclick="logoutSystem()"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg></span> Log Out</button>
+  </aside>
+
+  <main class="portal-main">
+    <div id="stdEmergencyBannerContainer" class="emergency-banner-slot"></div>
+
+    <div id="stdViewAnnouncements" class="student-tab-panel">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg">Campus News</h2>
+      </div>
+      <div id="studentAnnouncementsFeed" class="feed-container"></div>
+    </div>
+
+    <div id="stdViewChat" class="student-tab-panel chat-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg">Chat Box</h2>
+      </div>
+      <div class="chat-workspace">
+        <div class="chat-contacts-pane">
+          <div class="contacts-header">
+          </div>
+          <div id="chatTeachersList" class="contacts-list"></div>
+        </div>
+        <div id="chatMessagingPane" class="chat-pane">
+          <div class="chat-empty">
+            <span><svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-secondary); opacity:0.6;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+            <p>No Active Conversation Selected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="stdViewMaterials" class="student-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2 class="mobile-page-title-lg"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Home Assignment</h2>
+      </div>
+      <div id="studentMaterialsFeedBox"></div>
+    </div>
+
+    <div id="stdViewReports" class="student-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Report Cards &amp; Performance Portals</h2>
+        <p>View structural term-based performance score evaluations uploaded onto your profile card.</p>
+      </div>
+      <div id="studentReportsFeedBox"></div>
+    </div>
+
+    <div id="stdViewAttendanceRate" class="student-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Academic Attendance Rate Dashboard</h2>
+        <p>Track your live monthly performance rate, total class participation statistics, and daily status history logs.</p>
+      </div>
+      
+      <!-- Metrics Overview Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 1.25rem; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <div style="position: relative; width: 80px; height: 80px; margin-bottom: 0.5rem;">
+            <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+              <path id="attendanceCircularGauge" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="0, 100" stroke-linecap="round" />
+            </svg>
+            <div id="attendanceGaugeText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1rem; font-weight: 700; color: var(--gold-light);">0%</div>
+          </div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">Overall Rate</span>
+        </div>
+        
+        <div class="glass-panel" style="padding: 1.25rem; text-align: center;">
+          <div style="font-size: 2rem; font-weight: bold; color: #22c55e; margin-bottom: 0.25rem;" id="stdAttPresentDays">0</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">Days Present</div>
+        </div>
+
+        <div class="glass-panel" style="padding: 1.25rem; text-align: center;">
+          <div style="font-size: 2rem; font-weight: bold; color: #ef4444; margin-bottom: 0.25rem;" id="stdAttAbsentDays">0</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">Days Absent</div>
+        </div>
+
+        <div class="glass-panel" style="padding: 1.25rem; text-align: center;">
+          <div style="font-size: 2rem; font-weight: bold; color: #eab308; margin-bottom: 0.25rem;" id="stdAttLateDays">0</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">Days Late</div>
+        </div>
+
+        <div class="glass-panel" style="padding: 1.25rem; text-align: center;">
+          <div style="font-size: 2rem; font-weight: bold; color: var(--gold-light); margin-bottom: 0.25rem;" id="stdAttTotalDays">0</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">Total Marked Days</div>
+        </div>
+      </div>
+
+      <!-- Trend Graph -->
+      <div class="glass-panel" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: var(--gold-light); font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Monthly Attendance Trend Graph
+        </h3>
+        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1.5rem;">Interactive analytical timeline representation of your attendance rate percentage across academic months.</p>
+        <div id="studentAttendanceTrendGraph" style="width: 100%; height: 280px; position: relative;"></div>
+      </div>
+
+
+    </div>
+
+    <div id="stdViewMe" class="student-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:8px; color:var(--gold-light);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>My Profile</h2>
+      </div>
+
+      <!-- ── MENU (default view) ─────────────────────────────────────── -->
+      <div id="profileMenuView" style="max-width:600px;">
+        <div class="glass-panel" style="padding:8px;">
+          <button class="profile-menu-row" onclick="showProfileSubview('personal')">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+            <span class="profile-menu-label">Personal Information</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+          <button class="profile-menu-row" onclick="switchStudentTab('reports')">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
+            <span class="profile-menu-label">Report Card</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+          <button class="profile-menu-row" onclick="switchStudentTab('attendance')">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+            <span class="profile-menu-label">Attendance Rate</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+          <button class="profile-menu-row" onclick="showProfileSubview('password')" style="border-bottom:none;">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+            <span class="profile-menu-label">Password Management</span>
+            <svg class="profile-menu-chevron" viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+          </button>
+        </div>
+
+        <button class="glass-btn" style="width:100%; justify-content:center; padding:0.85rem 1rem; margin-top:1.25rem; border-color: rgba(255,90,90,0.3); color:#ff8080;" onclick="logoutSystem()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:-3px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
+          Log Out
+        </button>
+      </div>
+
+      <!-- ── PERSONAL INFO sub-page ──────────────────────────────────── -->
+      <div id="profilePersonalInfoView" style="max-width:600px; display:none;">
+        <button class="profile-subpage-back" onclick="showProfileSubview('menu')">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          Back to Profile
+        </button>
+        <div class="glass-panel">
+          <div id="studentMyProfileCardDetails" class="info-grid"></div>
+        </div>
+      </div>
+
+      <!-- ── PASSWORD MANAGEMENT sub-page ────────────────────────────── -->
+      <div id="profilePasswordView" style="max-width:600px; display:none;">
+        <button class="profile-subpage-back" onclick="showProfileSubview('menu')">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          Back to Profile
+        </button>
+        <div class="glass-panel">
+          <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--gold-light);">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Change Portal Password
+          </h3>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">Update your student portal login credential. Keep it secure.</p>
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">New Password</label>
+            <input id="stdNewPassword" class="glass-input" type="password" placeholder="Enter new password...">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.25rem; font-size: 0.8rem; opacity: 0.8;">Confirm Password</label>
+            <input id="stdConfirmPassword" class="glass-input" type="password" placeholder="Confirm new password...">
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.6rem 1rem;" onclick="changeStudentPassword()">
+            Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PARENT SECTION
+════════════════════════════════════════════ -->
+<div id="parentSection" class="portal-root" style="display:none;">
+  <aside class="glass-sidebar">
+    <div class="sidebar-logo-mini">
+      <img src="/assets/logo-Btyu2gdc.png" alt="Alpha Private School Logo" class="school-logo" referrerPolicy="no-referrer">
+    </div>
+    <div class="sidebar-title">ALPHA PARENT PORTAL</div>
+    <div id="parentChildBadge" class="sidebar-badge parent-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      Parent Monitor Mode
+    </div>
+    <ul class="sidebar-nav">
+      <li id="prnTabBtnAnn"   class="nav-item active" onclick="switchParentTab('announcements')"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M16 8h2m-2 4h2M6 8h6v8H6z"></path></svg></span> Campus News</li>
+      <li id="prnTabBtnMarks" class="nav-item"         onclick="switchParentTab('marks')">       <span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> Child Mark Sheet</li>
+    </ul>
+    <button id="prnLogoutBtn" class="logout-btn" onclick="logoutSystem()"><span class="nav-icon"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg></span> Log Out</button>
+  </aside>
+
+  <main class="portal-main">
+    <div id="prnEmergencyBannerContainer" class="emergency-banner-slot"></div>
+
+    <div id="prnViewAnnouncements" class="parent-tab-panel">
+      <div class="page-header">
+        <h2>Campus News &amp; Circular Bulletins</h2>
+        <p>Official school announcements and notification logs published by the Admin Desk.</p>
+      </div>
+      <div id="parentAnnouncementsFeed" class="feed-container"></div>
+    </div>
+
+    <div id="prnViewMarks" class="parent-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Academic Progress Mark Sheets</h2>
+        <p>Term evaluation cards assigned directly to your child's student record.</p>
+      </div>
+      <div id="parentMarksFeedBox"></div>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     PRINCIPAL SECTION (EXECUTIVE PORTAL)
+     ════════════════════════════════════════════ -->
+<div id="principalSection" class="portal-root" style="display:none;">
+  <aside class="glass-sidebar">
+    <div class="sidebar-logo-mini">
+      <img src="/assets/logo-Btyu2gdc.png" alt="Alpha Private School Logo" class="school-logo" referrerPolicy="no-referrer">
+    </div>
+    <div class="sidebar-title">ALPHA EXECUTIVE</div>
+    <div id="principalBadge" class="sidebar-badge" style="background: rgba(232, 201, 122, 0.15); color: var(--gold-light); border: 1px solid var(--gold-border);">
+      👑 Principal Portal
+    </div>
+    <ul class="sidebar-nav">
+      <li id="prcTabBtnDashboard" class="nav-item active" onclick="switchPrincipalTab('dashboard')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="3" width="7" height="9"></rect>
+            <rect x="14" y="3" width="7" height="5"></rect>
+            <rect x="14" y="12" width="7" height="9"></rect>
+            <rect x="3" y="16" width="7" height="5"></rect>
+          </svg>
+        </span> 
+        Overview
+      </li>
+      <li id="prcTabBtnApprovals" class="nav-item" onclick="switchPrincipalTab('approvals')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </span> 
+        Approval &amp; Requests
+      </li>
+      <li id="prcTabBtnEvaluation" class="nav-item" onclick="switchPrincipalTab('evaluation')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+        </span> 
+        Teacher Evaluation
+      </li>
+      <li id="prcTabBtnEmergency" class="nav-item" onclick="switchPrincipalTab('emergency')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </span> 
+        Emergency Command
+      </li>
+      <li id="prcTabBtnAcademics" class="nav-item" onclick="switchPrincipalTab('academics')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </span> 
+        Academic Oversight
+      </li>
+      <li id="prcTabBtnFinance" class="nav-item" onclick="switchPrincipalTab('finance')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </span> 
+        Finance &amp; Assets
+      </li>
+      <li id="prcTabBtnParents" class="nav-item" onclick="switchPrincipalTab('parents')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+        </span> 
+        Parent &amp; TC Letters
+      </li>
+      <li id="prcTabBtnCalendar" class="nav-item" onclick="switchPrincipalTab('calendar')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </span> 
+        Events &amp; VIP Visits
+      </li>
+      <li id="prcTabBtnStudents" class="nav-item" onclick="switchPrincipalTab('students')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </span> 
+        Student Directory
+      </li>
+      <li id="prcTabBtnTeachers" class="nav-item" onclick="switchPrincipalTab('teachers')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </span> 
+        Teacher Roster
+      </li>
+      <li id="prcTabBtnAttendance" class="nav-item" onclick="switchPrincipalTab('attendance')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </span> 
+        School Attendance
+      </li>
+      <li id="prcTabBtnLogs" class="nav-item" onclick="switchPrincipalTab('logs')">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </span> 
+        Security Audit Logs
+      </li>
+    </ul>
+    <button class="logout-btn" onclick="logoutSystem()">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path>
+        </svg>
+      </span> 
+      Log Out
+    </button>
+  </aside>
+
+  <main class="portal-main">
+    <div id="prcEmergencyBannerContainer" class="emergency-banner-slot"></div>
+    
+    <!-- OVERVIEW TAB -->
+    <div id="prcViewDashboard" class="principal-tab-panel">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2>Executive School Overview</h2>
+          <p>Real-time analytics, curriculum progress metrics, and direct administration circular tool.</p>
+        </div>
+        <button class="glass-btn primary-btn" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px;" onclick="printPrincipalExecutiveReport()">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+          <span>Print Executive Summary</span>
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="glass-panel" style="padding: 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-radius: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Pupils Enrolled</div>
+            <div id="prcStatStudents" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">0</div>
+          </div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Active student profiles</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-radius: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Active Faculty</div>
+            <div id="prcStatTeachers" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">0</div>
+          </div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Registered teaching roster</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-radius: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Total Courses</div>
+            <div id="prcStatSubjects" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">0</div>
+          </div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Subject groups assigned</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-radius: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Circular Announcements</div>
+            <div id="prcStatAnnouncements" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">0</div>
+          </div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Published to boards</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Left Side: Grade Distribution Chart -->
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+            Student Enrollment by Grade Level
+          </h3>
+          <div id="prcGradeDistributionChart" style="min-height: 180px;"></div>
+        </div>
+
+        <!-- Right Side: Quick Circular Broadcast & Recent Feed -->
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-1.5M14 9l-1.5-1.5M10 5L8.5 3.5"></path></svg>
+            Broadcast Official Circular Bulletin
+          </h3>
+          <div class="field-wrap">
+            <label class="field-label">Bulletin Title</label>
+            <input type="text" id="prcAnnTitle" class="glass-input" placeholder="e.g. End of Term Examination Schedule">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Bulletin Description / Message</label>
+            <textarea id="prcAnnDesc" class="glass-input" rows="3" placeholder="Write the details of the official notification here..."></textarea>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Announcement Banner Image (Optional)</label>
+            <input type="file" id="prcAnnImage" class="glass-input" accept="image/*" onchange="previewPrincipalAnnouncementImage(event)">
+            <img id="prcAnnImgPreview" src="" style="display:none; max-height:140px; border-radius:12px; margin-top:12px; border:1px solid var(--gold-border);">
+          </div>
+          <button class="glass-btn primary-btn" style="margin-top: 1rem; width: 100%;" onclick="executePrincipalAnnouncement()">
+            <span>Broadcast Bulletin</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Announcements Feed -->
+      <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M16 8h2m-2 4h2M6 8h6v8H6z"></path></svg>
+          Recent Bulletins Log
+        </h3>
+        <div id="prcRecentAnnouncements"></div>
+      </div>
+    </div>
+
+    <!-- STUDENT DIRECTORY TAB -->
+    <div id="prcViewStudents" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Student Information Directory</h2>
+        <p>Browse full student profiles, view personal identification cards, and evaluate house/grade distribution logs.</p>
+      </div>
+
+      <!-- Search & Filter Controls -->
+      <div class="filter-row-3col" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 1.5rem;">
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <input type="text" id="prcStudentSearch" class="glass-input" placeholder="Search by student name or registration number..." oninput="renderPrincipalStudentDirectory()">
+        </div>
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <select id="prcStudentGradeFilter" class="glass-input" onchange="renderPrincipalStudentDirectory()">
+            <option value="ALL">All Grades</option>
+            <option value="KG 1">KG 1</option>
+            <option value="KG 2">KG 2</option>
+            <option value="LKG">LKG</option>
+            <option value="UKG">UKG</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+          </select>
+        </div>
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <select id="prcStudentSectionFilter" class="glass-input" onchange="renderPrincipalStudentDirectory()">
+            <option value="ALL">All Sections</option>
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Panel -->
+      <div class="glass-panel" style="overflow-x: auto; border-radius: 16px;">
+        <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--gold-border);">
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">User ID</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Full Name</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Grade</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Section</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Roll No</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">House</th>
+            </tr>
+          </thead>
+          <tbody id="prcStudentTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TEACHER ROSTER TAB -->
+    <div id="prcViewTeachers" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Faculty &amp; Instructor Roster</h2>
+        <p>Inspect active teaching assignments, qualification details, and contact profiles of academy staff.</p>
+      </div>
+
+      <!-- Search Controls -->
+      <div style="margin-bottom: 1.5rem; max-width: 500px;">
+        <input type="text" id="prcTeacherSearch" class="glass-input" placeholder="Search teachers by name or subject specialty..." oninput="renderPrincipalTeacherRoster()">
+      </div>
+
+      <!-- Table Panel -->
+      <div class="glass-panel" style="overflow-x: auto; border-radius: 16px;">
+        <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--gold-border);">
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Teacher ID</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Instructor Name</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Department Subject</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Assigned Grade Levels</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Degree / Qualification</th>
+            </tr>
+          </thead>
+          <tbody id="prcTeacherTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SCHOOL ATTENDANCE TAB -->
+    <div id="prcViewAttendance" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>School-Wide Attendance</h2>
+        <p>Live attendance rates across every class, calculated directly from teachers' daily registers.</p>
+      </div>
+
+      <!-- Stats -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">School-Wide Attendance Rate</div>
+          <div id="prcStatSchoolAttendance" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">—</div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Across all classes, all recorded days</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Students Below 75%</div>
+          <div id="prcStatAtRiskCount" style="font-size: 32px; font-weight: 800; color: #ef4444;">0</div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Flagged as at-risk of falling behind</div>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="padding: 24px; border-radius: 16px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+          Attendance Rate by Grade
+        </h3>
+        <div id="prcAttGradeChart" style="min-height: 120px;"></div>
+      </div>
+
+      <!-- Search & Filter Controls -->
+      <div class="filter-row-3col" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 1.5rem;">
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <input type="text" id="prcAttSearch" class="glass-input" placeholder="Search by student name or registration number..." oninput="renderPrincipalAttendanceOverview()">
+        </div>
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <select id="prcAttGradeFilter" class="glass-input" onchange="renderPrincipalAttendanceOverview()">
+            <option value="ALL">All Grades</option>
+            <option value="KG 1">KG 1</option>
+            <option value="KG 2">KG 2</option>
+            <option value="LKG">LKG</option>
+            <option value="UKG">UKG</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+          </select>
+        </div>
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <select id="prcAttSectionFilter" class="glass-input" onchange="renderPrincipalAttendanceOverview()">
+            <option value="ALL">All Sections</option>
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Panel -->
+      <div class="glass-panel" style="overflow-x: auto; border-radius: 16px;">
+        <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--gold-border);">
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">User ID</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Full Name</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Class</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Days Present</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Attendance Rate</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="prcAttendanceTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACADEMIC ANALYTICS & OVERSIGHT TAB -->
+    <div id="prcViewAcademics" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Academic &amp; Examination Oversight</h2>
+        <p>School performance heatmaps, automated at-risk student intervention, and annual curriculum progress monitoring.</p>
+      </div>
+
+      <!-- Overview Stats -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Institutional Pass Rate</div>
+          <div id="prcStatPassRate" style="font-size: 32px; font-weight: 800; color: #10b981;">0%</div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Students meeting passing grade threshold</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">Honor Roll Achievers</div>
+          <div id="prcStatHonorCount" style="font-size: 32px; font-weight: 800; color: var(--gold-light);">0</div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Students with &ge; 85% academic score</div>
+        </div>
+        <div class="glass-panel" style="padding: 24px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; font-weight: 700; margin-bottom: 8px;">At-Risk Support Watchlist</div>
+          <div id="prcStatSupportCount" style="font-size: 32px; font-weight: 800; color: #f59e0b;">0</div>
+          <div style="font-size: 12px; opacity: 0.5; margin-top: 8px;">Students needing academic intervention</div>
+        </div>
+      </div>
+
+      <!-- School Performance Heatmap Matrix -->
+      <div class="glass-panel" style="padding: 24px; border-radius: 16px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+          🗺️ Subject Pass/Fail Ratio Heatmap Matrix
+        </h3>
+        <div id="prcAcademicHeatmapBox" style="overflow-x: auto;"></div>
+      </div>
+
+      <!-- Curriculum Progress Monitor & At-Risk Intervention -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 15px; color: var(--gold-light); margin-bottom: 12px;">📚 Annual Curriculum &amp; Syllabus Progress</h3>
+          <div id="prcCurriculumProgressBox" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 15px; color: #f59e0b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            ⚠️ At-Risk Student Intervention Console
+          </h3>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; font-size: 13px;">
+              <thead>
+                <tr>
+                  <th style="padding: 8px; color: var(--gold);">Student</th>
+                  <th style="padding: 8px; color: var(--gold);">Grade</th>
+                  <th style="padding: 8px; color: var(--gold);">Risk Factor</th>
+                  <th style="padding: 8px; color: var(--gold); text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="prcAcademicSupportTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPROVAL & REQUEST CENTER TAB -->
+    <div id="prcViewApprovals" class="principal-tab-panel" style="display:none;">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2>Executive Approval &amp; Request Center</h2>
+          <p>Review and grant/deny leave applications, departmental budget funding, and teacher grade modifications.</p>
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <button id="prcApprTabLeave" class="glass-btn primary-btn" onclick="switchApprovalSubTab('leave')">📋 Staff Leave Requests</button>
+        <button id="prcApprTabBudget" class="glass-btn secondary-btn" onclick="switchApprovalSubTab('budget')">💰 Budget &amp; Expenses</button>
+        <button id="prcApprTabGrade" class="glass-btn secondary-btn" onclick="switchApprovalSubTab('grade')">📝 Grade Modifications</button>
+      </div>
+
+      <!-- Subpanel 1: Leave Requests -->
+      <div id="prcSubLeaveRequests" class="glass-panel" style="padding: 20px; border-radius: 16px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px;">Faculty &amp; Staff Leave Applications</h3>
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="padding: 10px; color: var(--gold);">Ref ID</th>
+                <th style="padding: 10px; color: var(--gold);">Applicant</th>
+                <th style="padding: 10px; color: var(--gold);">Role</th>
+                <th style="padding: 10px; color: var(--gold);">Leave Category</th>
+                <th style="padding: 10px; color: var(--gold);">Requested Dates</th>
+                <th style="padding: 10px; color: var(--gold);">Reason</th>
+                <th style="padding: 10px; color: var(--gold);">Status</th>
+                <th style="padding: 10px; color: var(--gold); text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="prcLeaveTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Subpanel 2: Budget Requests -->
+      <div id="prcSubBudgetRequests" class="glass-panel" style="padding: 20px; border-radius: 16px; margin-bottom: 1.5rem; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin: 0;">Departmental Funding &amp; Equipment Requisitions</h3>
+          <button class="glass-btn primary-btn" style="padding: 6px 14px; font-size: 12px;" onclick="promptNewBudgetRequest()">+ New Budget Request</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="padding: 10px; color: var(--gold);">Ref ID</th>
+                <th style="padding: 10px; color: var(--gold);">Department</th>
+                <th style="padding: 10px; color: var(--gold);">Requisition Item</th>
+                <th style="padding: 10px; color: var(--gold);">Requested By</th>
+                <th style="padding: 10px; color: var(--gold);">Amount ($)</th>
+                <th style="padding: 10px; color: var(--gold);">Status</th>
+                <th style="padding: 10px; color: var(--gold); text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="prcBudgetTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Subpanel 3: Grade Modification Requests -->
+      <div id="prcSubGradeModifications" class="glass-panel" style="padding: 20px; border-radius: 16px; margin-bottom: 1.5rem; display: none;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px;">Teacher Grade Correction &amp; Score Change Requests</h3>
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="padding: 10px; color: var(--gold);">Ref ID</th>
+                <th style="padding: 10px; color: var(--gold);">Teacher</th>
+                <th style="padding: 10px; color: var(--gold);">Student</th>
+                <th style="padding: 10px; color: var(--gold);">Subject</th>
+                <th style="padding: 10px; color: var(--gold);">Original &rarr; Proposed Score</th>
+                <th style="padding: 10px; color: var(--gold);">Justification</th>
+                <th style="padding: 10px; color: var(--gold);">Status</th>
+                <th style="padding: 10px; color: var(--gold); text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="prcGradeModTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEACHER & STAFF PERFORMANCE EVALUATION TAB -->
+    <div id="prcViewEvaluation" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Teacher &amp; Staff Performance Evaluation Desk</h2>
+        <p>Record classroom observation notes, review teaching KPIs, star ratings, and professional development certifications.</p>
+      </div>
+
+      <!-- Observation Form & History Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 14px;">🔍 Log Classroom Walk-through</h3>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Target Teacher</label>
+            <select id="prcObsTeacherSelect" class="glass-input"></select>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Subject &amp; Class Observed</label>
+            <input type="text" id="prcObsSubject" class="glass-input" placeholder="e.g. Grade 10 Mathematics">
+          </div>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Observation Rating (1.0 - 5.0 Stars)</label>
+            <input type="number" id="prcObsRating" class="glass-input" min="1" max="5" step="0.1" value="4.5">
+          </div>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Observation Notes</label>
+            <textarea id="prcObsNotes" class="glass-input" rows="3" placeholder="Pacing, board presentation, student engagement..."></textarea>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 16px;">
+            <label class="field-label">Actionable Recommendations</label>
+            <input type="text" id="prcObsRecommendations" class="glass-input" placeholder="e.g. Incorporate digital quiz tool">
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%;" onclick="saveClassroomObservation()">Save Observation Record</button>
+        </div>
+
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 14px;">📋 Observation History &amp; Feedback Logs</h3>
+          <div id="prcObservationHistoryBox" style="max-height: 380px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
+      <!-- Teacher KPI Grid -->
+      <div class="glass-panel" style="padding: 20px; border-radius: 16px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 16px;">⭐ Faculty KPI Ratings &amp; Professional Index</h3>
+        <div id="prcTeacherKPIGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;"></div>
+      </div>
+    </div>
+
+    <!-- EMERGENCY & SAFETY COMMAND CENTER TAB -->
+    <div id="prcViewEmergency" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Emergency &amp; Campus Safety Command Center</h2>
+        <p>Broadcast urgent school-wide notifications, weather/lockdown alerts, and log campus safety incidents.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px; border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+          <h3 style="font-size: 16px; color: #ef4444; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            🚨 Immediate Emergency Broadcast Console
+          </h3>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label" style="color: #fca5a5; display: flex; justify-content: space-between;">
+              <span>Emergency Alert Level (Type custom or select)</span>
+              <span style="font-size: 11px; opacity: 0.8; font-weight: normal;">✍️ Free Typing Enabled</span>
+            </label>
+            <input type="text" id="prcEmgLevel" class="glass-input" list="prcEmgLevelList" placeholder="Type or select alert level (e.g. Severe Weather, Lockdown, Power Outage)..." style="border-color: rgba(239, 68, 68, 0.45); background: rgba(239, 68, 68, 0.08); color: #ffffff; font-weight: 600;" value="Severe Weather Alert">
+            <datalist id="prcEmgLevelList">
+              <option value="Severe Weather / Storm Alert">
+              <option value="Campus Lockdown / Security Warning">
+              <option value="Unexpected Early Campus Closure">
+              <option value="Urgent Campus Safety Notice">
+              <option value="Fire Alarm / Evacuation Notice">
+              <option value="Power Outage & Infrastructure Advisory">
+              <option value="Medical & Health Precaution">
+              <option value="Transportation / Bus Delay Notice">
+            </datalist>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+              <button type="button" class="glass-btn secondary-btn" style="padding: 3px 8px; font-size: 11px; border-radius: 12px; border-color: rgba(239,68,68,0.4); color: #fca5a5;" onclick="setEmgLevelPreset('Severe Weather / Storm Alert')">🌩️ Weather</button>
+              <button type="button" class="glass-btn secondary-btn" style="padding: 3px 8px; font-size: 11px; border-radius: 12px; border-color: rgba(239,68,68,0.4); color: #fca5a5;" onclick="setEmgLevelPreset('Campus Lockdown / Security Warning')">🔒 Lockdown</button>
+              <button type="button" class="glass-btn secondary-btn" style="padding: 3px 8px; font-size: 11px; border-radius: 12px; border-color: rgba(239,68,68,0.4); color: #fca5a5;" onclick="setEmgLevelPreset('Unexpected Early Campus Closure')">📢 Early Closure</button>
+              <button type="button" class="glass-btn secondary-btn" style="padding: 3px 8px; font-size: 11px; border-radius: 12px; border-color: rgba(239,68,68,0.4); color: #fca5a5;" onclick="setEmgLevelPreset('Urgent Campus Safety Notice')">⚠️ Safety Notice</button>
+              <button type="button" class="glass-btn secondary-btn" style="padding: 3px 8px; font-size: 11px; border-radius: 12px; border-color: rgba(239,68,68,0.4); color: #fca5a5;" onclick="setEmgLevelPreset('Power Outage & Infrastructure Advisory')">⚡ Power Outage</button>
+            </div>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label" style="color: #fca5a5;">Target Audience</label>
+            <select id="prcEmgTarget" class="glass-input" style="border-color: rgba(239, 68, 68, 0.4);">
+              <option value="ALL">All Parents, Teachers, &amp; Students (School-Wide)</option>
+              <option value="PARENTS">Parents &amp; Guardians Only</option>
+              <option value="TEACHERS">Teachers &amp; Staff Only</option>
+              <option value="STUDENTS">Students Only</option>
+            </select>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 16px;">
+            <label class="field-label" style="color: #fca5a5;">Alert Description &amp; Instructions</label>
+            <textarea id="prcEmgMessage" class="glass-input" rows="4" style="border-color: rgba(239, 68, 68, 0.4);" placeholder="State clear emergency guidelines or dismissal instructions..."></textarea>
+          </div>
+          <button class="glass-btn" style="width: 100%; background: #ef4444; color: white; border: none; padding: 12px; font-weight: 700;" onclick="sendPrincipalEmergencyBroadcast()">
+            📢 Dispatch Urgent Emergency Broadcast
+          </button>
+        </div>
+
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 14px;">📡 Emergency Broadcast History</h3>
+          <div id="prcEmgHistoryBox" style="max-height: 360px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin: 0;">🛡️ Campus Incident &amp; Disciplinary Log</h3>
+          <button class="glass-btn primary-btn" style="padding: 6px 14px; font-size: 12px;" onclick="promptNewIncidentLog()">+ Log Safety/Clinic Incident</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="padding: 10px; color: var(--gold);">Incident ID</th>
+                <th style="padding: 10px; color: var(--gold);">Student / Subject</th>
+                <th style="padding: 10px; color: var(--gold);">Category</th>
+                <th style="padding: 10px; color: var(--gold);">Date</th>
+                <th style="padding: 10px; color: var(--gold);">Details</th>
+                <th style="padding: 10px; color: var(--gold);">Status</th>
+                <th style="padding: 10px; color: var(--gold); text-align: right;">Update Status</th>
+              </tr>
+            </thead>
+            <tbody id="prcIncidentTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL & ASSET OVERVIEW TAB -->
+    <div id="prcViewFinance" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Financial Overview &amp; Campus Asset Management</h2>
+        <p>Tuition collection summary, pending fee balances, and school facility/transport maintenance requests.</p>
+      </div>
+
+      <!-- Fee Summary KPI Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6; font-weight: 700;">Projected Tuition Fees</div>
+          <div id="prcFinTotalProjected" style="font-size: 28px; font-weight: 800; color: var(--gold-light);">$0</div>
+        </div>
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6; font-weight: 700;">Total Collected</div>
+          <div id="prcFinCollected" style="font-size: 28px; font-weight: 800; color: #10b981;">$0</div>
+        </div>
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6; font-weight: 700;">Pending Balances</div>
+          <div id="prcFinPending" style="font-size: 28px; font-weight: 800; color: #ef4444;">$0</div>
+        </div>
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6; font-weight: 700;">Collection Rate</div>
+          <div id="prcFinRate" style="font-size: 28px; font-weight: 800; color: #3b82f6;">0%</div>
+        </div>
+      </div>
+
+      <!-- Fee Table & Asset Maintenance Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-size: 15px; color: var(--gold-light); margin: 0;">💳 Fee Collection Breakdown by Grade</h3>
+            <button class="glass-btn secondary-btn" style="padding: 4px 10px; font-size: 11px;" onclick="sendFeeRemindersAll()">📩 Remind Pending</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; font-size: 13px;">
+              <thead>
+                <tr>
+                  <th style="padding: 8px; color: var(--gold);">Grade</th>
+                  <th style="padding: 8px; color: var(--gold);">Collected</th>
+                  <th style="padding: 8px; color: var(--gold);">Pending</th>
+                </tr>
+              </thead>
+              <tbody id="prcFeeTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-size: 15px; color: var(--gold-light); margin: 0;">🚌 Campus Facility &amp; Bus Maintenance</h3>
+            <button class="glass-btn primary-btn" style="padding: 4px 10px; font-size: 11px;" onclick="promptNewMaintenanceTicket()">+ Ticket</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; font-size: 13px;">
+              <thead>
+                <tr>
+                  <th style="padding: 8px; color: var(--gold);">Asset</th>
+                  <th style="padding: 8px; color: var(--gold);">Issue</th>
+                  <th style="padding: 8px; color: var(--gold);">Priority</th>
+                  <th style="padding: 8px; color: var(--gold);">Status</th>
+                </tr>
+              </thead>
+              <tbody id="prcMaintenanceTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARENT RELATIONS & OFFICIAL LETTERS TAB -->
+    <div id="prcViewParents" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>Parent Relations &amp; Official Letter Generator</h2>
+        <p>Schedule Principal-Parent Town Halls and instantly generate official signed Transfer Certificates (TC) &amp; Recommendation letters.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Official Certificate Generator Form -->
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 14px;">📜 Official Certificate &amp; Letter Generator</h3>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Target Student</label>
+            <select id="prcDocStudentSelect" class="glass-input"></select>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Document Type</label>
+            <select id="prcDocTypeSelect" class="glass-input">
+              <option value="Transfer Certificate">🏫 School Transfer Certificate (TC)</option>
+              <option value="Recommendation Letter">🎓 University Recommendation Letter</option>
+              <option value="Character Certificate">📜 Character &amp; Conduct Certificate</option>
+            </select>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 16px;">
+            <label class="field-label">Special Accomplishments / Remarks</label>
+            <textarea id="prcDocRemarks" class="glass-input" rows="3" placeholder="Extracurricular achievement, conduct notes, recommendation highlights..."></textarea>
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%;" onclick="generateOfficialCertificate()">🖨️ Generate &amp; Print Official Signed Document</button>
+        </div>
+
+        <!-- Town Hall Scheduler -->
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <h3 style="font-size: 16px; color: var(--gold-light); margin-bottom: 14px;">🏛️ Principal-Parent Town Hall Scheduler</h3>
+          <div class="field-wrap" style="margin-bottom: 12px;">
+            <label class="field-label">Town Hall Topic / Agenda</label>
+            <input type="text" id="prcTHTopic" class="glass-input" placeholder="e.g. Annual Term 1 Curriculum & Q&A Session">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div class="field-wrap">
+              <label class="field-label">Date</label>
+              <input type="date" id="prcTHDate" class="glass-input">
+            </div>
+            <div class="field-wrap">
+              <label class="field-label">Time</label>
+              <input type="time" id="prcTHTime" class="glass-input" value="17:00">
+            </div>
+          </div>
+          <div class="field-wrap" style="margin-bottom: 16px;">
+            <label class="field-label">Venue / Streaming Link</label>
+            <input type="text" id="prcTHLocation" class="glass-input" placeholder="e.g. School Main Auditorium & Zoom Stream">
+          </div>
+          <button class="glass-btn primary-btn" style="width: 100%; margin-bottom: 16px;" onclick="scheduleParentTownHall()">Schedule &amp; Publish Town Hall</button>
+
+          <h4 style="font-size: 13px; color: var(--gold); margin-bottom: 8px;">Upcoming Scheduled Town Halls</h4>
+          <div id="prcTownHallListBox" style="max-height: 180px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MASTER CALENDAR & VIP VISITS TAB -->
+    <div id="prcViewCalendar" class="principal-tab-panel" style="display:none;">
+      <div class="page-header">
+        <h2>School Calendar &amp; VIP Visits Management</h2>
+        <p>Approve and publish school-wide academic events, sports days, science fairs, and log distinguished VIP visitors.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <!-- Master Event Calendar -->
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-size: 15px; color: var(--gold-light); margin: 0;">📅 Master School Calendar &amp; Events</h3>
+            <button class="glass-btn primary-btn" style="padding: 4px 10px; font-size: 11px;" onclick="promptNewMasterEvent()">+ Event</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; font-size: 13px;">
+              <thead>
+                <tr>
+                  <th style="padding: 8px; color: var(--gold);">Event Title</th>
+                  <th style="padding: 8px; color: var(--gold);">Category</th>
+                  <th style="padding: 8px; color: var(--gold);">Date Range</th>
+                  <th style="padding: 8px; color: var(--gold);">Status</th>
+                </tr>
+              </thead>
+              <tbody id="prcMasterEventTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Guest Speaker & VIP Visits Log -->
+        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-size: 15px; color: var(--gold-light); margin: 0;">🏛️ Guest Speaker &amp; VIP Dignitary Log</h3>
+            <button class="glass-btn primary-btn" style="padding: 4px 10px; font-size: 11px;" onclick="promptNewVIPVisit()">+ VIP Visit</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; font-size: 13px;">
+              <thead>
+                <tr>
+                  <th style="padding: 8px; color: var(--gold);">Visitor Name</th>
+                  <th style="padding: 8px; color: var(--gold);">Organization</th>
+                  <th style="padding: 8px; color: var(--gold);">Date</th>
+                  <th style="padding: 8px; color: var(--gold);">Purpose</th>
+                </tr>
+              </thead>
+              <tbody id="prcVIPTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY & AUDIT LOGS TAB -->
+    <div id="prcViewLogs" class="principal-tab-panel" style="display:none;">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2>Security &amp; Administrative Event Logs</h2>
+          <p>Real-time audit trail of administrative actions, authentication attempts, and system updates.</p>
+        </div>
+        <button class="glass-btn secondary-btn" style="padding: 8px 16px;" onclick="renderPrincipalAuditLogs()">
+          🔄 Refresh Logs
+        </button>
+      </div>
+
+      <!-- Search & Category Filters -->
+      <div class="filter-row-3col" style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 1.5rem;">
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <input type="text" id="prcLogSearch" class="glass-input" placeholder="Search log event details, actor, or action..." oninput="renderPrincipalAuditLogs()">
+        </div>
+        <div class="field-wrap" style="margin-bottom: 0;">
+          <select id="prcLogCategoryFilter" class="glass-input" onchange="renderPrincipalAuditLogs()">
+            <option value="ALL">All Categories</option>
+            <option value="Login">Authentications</option>
+            <option value="Attendance">Attendance Records</option>
+            <option value="Principal">Principal Desk</option>
+            <option value="Backup">System Backups</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Panel -->
+      <div class="glass-panel" style="overflow-x: auto; border-radius: 16px;">
+        <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--gold-border);">
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Timestamp</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">User / Actor</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Action</th>
+              <th style="padding: 12px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px;">Description</th>
+            </tr>
+          </thead>
+          <tbody id="prcLogsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     PROFILE MODAL
+     ════════════════════════════════════════════ -->
+<div id="detailsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalProfileTitle">
+  <div class="glass-modal">
+    <div class="modal-header">
+      <h3 id="modalProfileTitle">Profile Information Details</h3>
+      <button class="modal-close" onclick="closeDetailsModal()" aria-label="Close dialog">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="modalDynamicFields" class="info-grid"></div>
+      <button id="modalActionDeleteBtn" class="delete-btn">Terminate &amp; Delete Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- ATTENDANCE RESET CONFIRMATION MODAL -->
+<div id="attendanceResetModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="attendanceResetModalTitle">
+  <div class="glass-modal" style="max-width: 420px; text-align: center;">
+    <div class="modal-header" style="justify-content: center;">
+      <h3 id="attendanceResetModalTitle" style="font-size: 15px; color: var(--gold-light);">Clear This Month's Attendance</h3>
+    </div>
+    <div class="modal-body" style="padding: 24px; color: var(--text-primary);">
+      <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px; color: rgba(255, 255, 255, 0.85);">
+        Are you sure you want to clear attendance for this class for the month currently shown?<br><br>
+        This removes every student's marks for this month only, so you can re-take it from scratch. Other months are not affected.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="glass-btn secondary-btn" onclick="closeAttendanceResetModal()" style="min-width: 100px; padding: 8px 16px;">
+          <span>Cancel</span>
+        </button>
+        <button class="glass-btn primary-btn" onclick="confirmResetAttendanceSheet()" style="min-width: 120px; padding: 8px 16px; background: rgba(255, 75, 75, 0.2); border-color: rgb(255, 100, 100); color: #ffcccc;">
+          <span>Yes, Clear</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="database.js"></script>
+<script src="app.js"></script>
+
+<script>
+/* ── Sidebar responsive controls ── */
+function toggleSidebar() {
+    const btn     = document.getElementById('sidebarToggleBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+    // Find the currently visible sidebar (whichever portal section is shown)
+    const sidebar = document.querySelector('.portal-root[style*="flex"] .glass-sidebar, .portal-root[style*="block"] .glass-sidebar');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+        sidebar.classList.remove('open');
+        if (btn) btn.classList.remove('open');
+        if (overlay) overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+    } else {
+        sidebar.classList.add('open');
+        if (btn) btn.classList.add('open');
+        if (overlay) overlay.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeSidebar() {
+    const btn     = document.getElementById('sidebarToggleBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+    document.querySelectorAll('.glass-sidebar').forEach(s => s.classList.remove('open'));
+    if (btn) btn.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+    document.body.style.overflow = '';
+}
+
+/* Auto-close sidebar when a nav item is clicked on mobile */
+document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768 && e.target.closest('.nav-item')) {
+        setTimeout(closeSidebar, 120);
+    }
+});
+
+/* Auto-close sidebar on orientation change / resize to desktop */
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+        closeSidebar();
+        document.body.style.overflow = '';
+    }
+    updateHamburgerVisibility();
+});
+
+/* Show hamburger only on mobile screens (width <= 768px) when a portal section is active */
+function updateHamburgerVisibility() {
+    const btn = document.getElementById('sidebarToggleBtn');
+    if (!btn) return;
+    const portalIds = ['adminSection', 'teacherSection', 'studentSection', 'parentSection', 'principalSection'];
+    const anyPortalOpen = portalIds.some(id => {
+        const sec = document.getElementById(id);
+        return sec && sec.style.display && sec.style.display !== 'none';
+    });
+    btn.style.display = (window.innerWidth <= 768 && anyPortalOpen) ? 'flex' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', updateHamburgerVisibility);
+
+/* ── AI PORTAL ASSISTANT INTERACTION ENGINE ────────────────────────────── */
+let isAiChatOpen = false;
+let aiChatHistory = []; // Tracks chat messages for this session
+let activeDetectedRole = null;
+
+function updateAiAssistantButtonVisibility() {
+    const fab = document.getElementById('aiFabBtn');
+    if (!fab) return;
+    const anyPortalOpen = document.querySelector(
+        '#adminSection[style*="flex"], #teacherSection[style*="flex"], #studentSection[style*="flex"], #parentSection[style*="flex"], #principalSection[style*="flex"], #adminSection[style*="block"], #teacherSection[style*="block"], #studentSection[style*="block"], #parentSection[style*="block"], #principalSection[style*="block"]'
+    );
+    if (anyPortalOpen) {
+        fab.style.display = 'flex';
+        // Detect role shift
+        const currentRoleInfo = getActivePortalRoleInfo();
+        if (currentRoleInfo && currentRoleInfo.role !== activeDetectedRole) {
+            activeDetectedRole = currentRoleInfo.role;
+            resetAiAssistantWithWelcome(currentRoleInfo);
+        }
+    } else {
+        fab.style.display = 'none';
+        const win = document.getElementById('aiChatWindow');
+        if (win) win.classList.remove('open');
+        isAiChatOpen = false;
+    }
+}
+
+function getActivePortalRoleInfo() {
+    if (typeof currentActiveStudentSession !== 'undefined' && currentActiveStudentSession) {
+        return { role: 'student', name: currentActiveStudentSession.name, context: { grade: currentActiveStudentSession.grade, section: currentActiveStudentSession.section } };
+    } else if (typeof currentActiveTeacherSession !== 'undefined' && currentActiveTeacherSession) {
+        return { role: 'teacher', name: currentActiveTeacherSession.name, context: { grades: currentActiveTeacherSession.grades, subjects: currentActiveTeacherSession.subjects } };
+    } else if (typeof currentActiveParentChildSession !== 'undefined' && currentActiveParentChildSession) {
+        return { role: 'parent', name: "Parent of " + currentActiveParentChildSession.name, context: { childGrade: currentActiveParentChildSession.grade } };
+    } else if (typeof currentActivePrincipalSession !== 'undefined' && currentActivePrincipalSession) {
+        return { role: 'principal', name: 'School Principal', context: {} };
+    } else {
+        const adminSec = document.getElementById('adminSection');
+        if (adminSec && adminSec.style.display !== 'none') {
+            return { role: 'administrator', name: 'Alpha Administrator', context: {} };
+        }
+    }
+    return null;
+}
+
+function resetAiAssistantWithWelcome(roleInfo) {
+    aiChatHistory = [];
+    const body = document.getElementById('aiChatBody');
+    if (!body) return;
+    body.innerHTML = '';
+
+    // Generate Welcome Message
+    let welcomeText = `Hello **${roleInfo.name}**! I am your AI assistant for the **${roleInfo.role.toUpperCase()}** portal.\n\n`;
+    let suggestions = [];
+
+     if (roleInfo.role === 'administrator') {
+        welcomeText += "How can I assist you with administrative tasks, announcements, or documentation guidelines today?";
+        suggestions = [
+            { text: "Polish Announcement Draft", action: "Polish the draft of this school announcement to make it more professional and polite: [Your Draft]" },
+            { text: "Generate Policy Draft", action: "Draft a standard campus security and database backup policy guideline for staff." },
+            { text: "Draft Calendar Update", action: "Compose an update notice for parents about the revised academic calendar, exam dates, and upcoming school holidays." }
+        ];
+    } else if (roleInfo.role === 'teacher') {
+        welcomeText += "How can I assist you with lesson preparation, drafting assignments, or grading feedback today?";
+        suggestions = [
+            { text: "Draft Homework Questions", action: "Generate 5 high-quality, engaging homework questions for Grade 10 on the subject of Biology." },
+            { text: "Create Lesson Plan", action: "Create a brief 1-hour lesson plan template for a Science class explaining cell division." },
+            { text: "Student Performance Feedback", action: "Write some encouraging, constructive report card feedback for a student who does well in class but needs to submit homework on time." }
+        ];
+    } else if (roleInfo.role === 'student') {
+        welcomeText += "How can I help you study, explain a difficult science concept, or guide you through your homework today?";
+        suggestions = [
+            { text: "Explain Photosynthesis", action: "Explain the concept of Photosynthesis in simple, easy-to-understand terms with a everyday life example." },
+            { text: "Biology Homework Guidance", action: "I need step-by-step guidance on how to solve my science homework assignment without giving me the direct answers." },
+            { text: "Study Tips & Techniques", action: "Suggest some highly effective study routines or active recall techniques to prepare for my upcoming examinations." }
+        ];
+    } else if (roleInfo.role === 'parent') {
+        welcomeText += "How can I help you understand your child's curriculum, clarify announcements, or suggest study routines today?";
+        suggestions = [
+            { text: "Understand Student Growth", action: "Explain how to interpret child performance grades and share some techniques to support academic development at home." },
+            { text: "Summarize Campus Events", action: "Summarize recent school events and list the key actions or upcoming deadlines parents should keep in mind." },
+            { text: "At-Home Learning Activities", action: "Suggest 3 creative study routines or interactive learning activities I can practice at home with my child." }
+        ];
+    } else if (roleInfo.role === 'principal') {
+        welcomeText += "Greetings Executive Principal. How can I assist you with academic leadership, strategic planning, or reviewing educational logs today?";
+        suggestions = [
+            { text: "Draft Strategic Plan", action: "Formulate a strategic memo outline for staff on elevating academic standards and campus safety." },
+            { text: "School Circular Template", action: "Draft a formal end-of-term executive notice to parents thanking them for support and advising on holiday prep." },
+            { text: "Review Policy Guidelines", action: "Provide a quick summary template of standard school leadership guidelines on performance tracking and parent relations." }
+        ];
+    }
+
+    addAiMessage('system', welcomeText, suggestions);
+}
+
+let aiContextInterval = null;
+let currentSpeakBtn = null;
+
+function toggleAiChat() {
+    const win = document.getElementById('aiChatWindow');
+    if (!win) return;
+    isAiChatOpen = !isAiChatOpen;
+    if (isAiChatOpen) {
+        win.classList.add('open');
+        if (aiChatHistory.length === 0) {
+            const roleInfo = getActivePortalRoleInfo();
+            if (roleInfo) {
+                resetAiAssistantWithWelcome(roleInfo);
+            } else {
+                addAiMessage('system', 'Welcome to Alpha School Portal! Please log in to your account to unlock specialized AI assistance.');
+            }
+        }
+        updateAiContextToolbar();
+        aiContextInterval = setInterval(updateAiContextToolbar, 1000);
+        setTimeout(() => {
+            const input = document.getElementById('aiChatInput');
+            if (input) input.focus();
+        }, 100);
+    } else {
+        win.classList.remove('open');
+        if (aiContextInterval) {
+            clearInterval(aiContextInterval);
+            aiContextInterval = null;
+        }
+        if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
+    }
+}
+
+function toggleSpeakAiText(text, btn) {
+    if (!window.speechSynthesis) return;
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        if (currentSpeakBtn) {
+            currentSpeakBtn.style.color = 'rgba(255, 255, 255, 0.6)';
+            currentSpeakBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+        }
+        if (currentSpeakBtn === btn) {
+            currentSpeakBtn = null;
+            return;
+        }
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.onend = () => {
+        btn.style.color = 'rgba(255, 255, 255, 0.6)';
+        btn.style.background = 'rgba(255, 255, 255, 0.05)';
+        currentSpeakBtn = null;
+    };
+    utterance.onerror = () => {
+        btn.style.color = 'rgba(255, 255, 255, 0.6)';
+        btn.style.background = 'rgba(255, 255, 255, 0.05)';
+        currentSpeakBtn = null;
+    };
+    
+    btn.style.color = '#e5c158';
+    btn.style.background = 'rgba(212, 175, 55, 0.15)';
+    currentSpeakBtn = btn;
+    window.speechSynthesis.speak(utterance);
+}
+
+function updateAiContextToolbar() {
+    const label = document.getElementById('aiActiveContextLabel');
+    const actBtn = document.getElementById('aiContextActionButton');
+    if (!label || !actBtn) return;
+
+    const roleInfo = getActivePortalRoleInfo();
+    if (!roleInfo) {
+        label.innerText = 'Context: Public';
+        actBtn.style.display = 'none';
+        return;
+    }
+
+    label.innerText = `Context: ${roleInfo.role.charAt(0).toUpperCase() + roleInfo.role.slice(1)}`;
+    actBtn.style.display = 'none';
+
+    if (roleInfo.role === 'administrator') {
+        const announcementTabActive = document.getElementById('admViewAnnouncement') && document.getElementById('admViewAnnouncement').style.display !== 'none';
+        if (announcementTabActive) {
+            const desc = document.getElementById('annDesc') ? document.getElementById('annDesc').value.trim() : '';
+            if (desc) {
+                label.innerText = 'Announcement Draft Detected';
+                actBtn.innerText = '✨ AI Polish Notice';
+                actBtn.style.display = 'inline-block';
+            } else {
+                label.innerText = 'Context: Creating Announcement';
+            }
+        }
+    } else if (roleInfo.role === 'teacher') {
+        const homeworkTabActive = document.getElementById('tchViewHomework') && document.getElementById('tchViewHomework').style.display !== 'none';
+        if (homeworkTabActive) {
+            const hText = document.getElementById('tchHomText') ? document.getElementById('tchHomText').value.trim() : '';
+            if (hText) {
+                label.innerText = 'Homework Draft Detected';
+                actBtn.innerText = '✨ AI Polish Homework';
+                actBtn.style.display = 'inline-block';
+            } else {
+                label.innerText = 'Context: Drafting Homework';
+            }
+        }
+    }
+}
+
+function applyActiveContextAction() {
+    const roleInfo = getActivePortalRoleInfo();
+    if (!roleInfo) return;
+
+    const input = document.getElementById('aiChatInput');
+    if (!input) return;
+
+    if (roleInfo.role === 'administrator') {
+        const annDesc = document.getElementById('annDesc') ? document.getElementById('annDesc').value.trim() : '';
+        const annTitle = document.getElementById('annTitle') ? document.getElementById('annTitle').value.trim() : '';
+        if (annDesc) {
+            input.value = `Polish and refine this draft announcement. Keep it brief and correct:\n\nTitle: ${annTitle}\nContent: ${annDesc}`;
+            input.focus();
+        }
+    } else if (roleInfo.role === 'teacher') {
+        const homText = document.getElementById('tchHomText') ? document.getElementById('tchHomText').value.trim() : '';
+        if (homText) {
+            input.value = `Polish and refine this draft homework assignment. Keep it brief and correct:\n\n${homText}`;
+            input.focus();
+        }
+    }
+}
+
+function addAiMessage(sender, text, suggestions = null) {
+    const body = document.getElementById('aiChatBody');
+    if (!body) return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `ai-msg ${sender}`;
+    msgDiv.innerHTML = renderSimpleMarkdown(text);
+
+    if (sender === 'system') {
+        const speakBtn = document.createElement('button');
+        speakBtn.className = 'ai-speech-btn';
+        speakBtn.title = 'Speak Response';
+        speakBtn.style.position = 'absolute';
+        speakBtn.style.top = '6px';
+        speakBtn.style.right = '6px';
+        speakBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+        speakBtn.style.border = 'none';
+        speakBtn.style.borderRadius = '4px';
+        speakBtn.style.padding = '4px 6px';
+        speakBtn.style.cursor = 'pointer';
+        speakBtn.style.color = 'rgba(255, 255, 255, 0.6)';
+        speakBtn.style.display = 'flex';
+        speakBtn.style.alignItems = 'center';
+        speakBtn.style.justifyContent = 'center';
+        speakBtn.style.transition = 'all 0.2s';
+        speakBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        `;
+        
+        const plainText = text.replace(/<[^>]*>/g, '').replace(/\*\*|\*|#/g, '');
+        speakBtn.onclick = (e) => {
+            e.stopPropagation();
+            toggleSpeakAiText(plainText, speakBtn);
+        };
+        msgDiv.appendChild(speakBtn);
+    }
+
+    if (suggestions && suggestions.length > 0) {
+        const pillsDiv = document.createElement('div');
+        pillsDiv.className = 'ai-pills-container';
+        suggestions.forEach(pill => {
+            const btn = document.createElement('button');
+            btn.className = 'ai-pill';
+            btn.innerText = pill.text;
+            btn.onclick = () => selectAiPillAction(pill.action);
+            pillsDiv.appendChild(btn);
+        });
+        msgDiv.appendChild(pillsDiv);
+    }
+
+    body.appendChild(msgDiv);
+    body.scrollTop = body.scrollHeight;
+
+    aiChatHistory.push({ sender, text });
+}
+
+function selectAiPillAction(actionText) {
+    const input = document.getElementById('aiChatInput');
+    if (!input) return;
+    input.value = actionText;
+    input.focus();
+}
+
+async function sendAiChatMessage() {
+    const input = document.getElementById('aiChatInput');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    addAiMessage('user', text);
+
+    // Add loading shimmer
+    const body = document.getElementById('aiChatBody');
+    const loadDiv = document.createElement('div');
+    loadDiv.id = 'aiChatLoading';
+    loadDiv.className = 'ai-msg system';
+    loadDiv.style.padding = '8px 12px';
+    loadDiv.innerHTML = `
+        <div class="ai-loading-shimmer">
+            <div class="ai-dot"></div>
+            <div class="ai-dot"></div>
+            <div class="ai-dot"></div>
+        </div>
+    `;
+    body.appendChild(loadDiv);
+    body.scrollTop = body.scrollHeight;
+
+    const roleInfo = getActivePortalRoleInfo();
+    const payload = {
+        role: roleInfo ? roleInfo.role : 'student',
+        task: text,
+        context: roleInfo ? roleInfo.context : {},
+        input: text
+    };
+
+    try {
+        const response = await fetch('/api/ai/assistant', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        // Remove loading shimmer
+        const shimmer = document.getElementById('aiChatLoading');
+        if (shimmer) shimmer.remove();
+
+        const data = await response.json();
+        if (data && data.text) {
+            addAiMessage('system', data.text);
+        } else if (data && data.error) {
+            addAiMessage('system', `❌ Error: ${data.error}`);
+        } else {
+            addAiMessage('system', '❌ Error: Failed to receive response from AI backend API.');
+        }
+    } catch (err) {
+        console.error('AI assistant fetch failed:', err);
+        const shimmer = document.getElementById('aiChatLoading');
+        if (shimmer) shimmer.remove();
+        addAiMessage('system', '❌ Service temporary offline. Make sure you start the server and configure the GEMINI_API_KEY in Secrets.');
+    }
+}
+
+function renderSimpleMarkdown(text) {
+    if (!text) return '';
+    let html = escapeHTML(text);
+    
+    // Convert bold **text** to <strong>text</strong>
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert lines starting with '- ' or '* ' to list items
+    const lines = html.split('\n');
+    let inList = false;
+    const processedLines = lines.map(line => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+            const content = trimmed.substring(2);
+            let result = '';
+            if (!inList) {
+                inList = true;
+                result += '<ul class="ai-chat-list">';
+            }
+            result += `<li>${content}</li>`;
+            return result;
+        } else {
+            let result = '';
+            if (inList) {
+                inList = false;
+                result += '</ul>';
+            }
+            if (trimmed.startsWith('### ')) {
+                return result + `<h4 class="ai-chat-h4">${trimmed.substring(4)}</h4>`;
+            } else if (trimmed.startsWith('## ') || trimmed.startsWith('# ')) {
+                const hText = trimmed.startsWith('## ') ? trimmed.substring(3) : trimmed.substring(2);
+                return result + `<h3 class="ai-chat-h3">${hText}</h3>`;
+            }
+            return result + (trimmed === '' ? '<br>' : `<p class="ai-chat-p">${trimmed}</p>`);
+        }
+    });
+    if (inList) {
+        processedLines.push('</ul>');
+    }
+    return processedLines.join('\n');
+}
+
+/* Patch show() to also update hamburger & AI assistant visibility */
+const _origShow = show;
+window.show = function(id) {
+    _origShow(id);
+    updateHamburgerVisibility();
+    updateAiAssistantButtonVisibility();
+};
+
+const _origHide = hide;
+window.hide = function(id) {
+    _origHide(id);
+    updateHamburgerVisibility();
+    updateAiAssistantButtonVisibility();
+};
+
+/* Initial state */
+document.addEventListener('DOMContentLoaded', () => {
+    updateHamburgerVisibility();
+    updateAiAssistantButtonVisibility();
+});
+window.addEventListener('resize', () => {
+    updateHamburgerVisibility();
+    updateAiAssistantButtonVisibility();
+});
+</script>
+
+
+<!-- Floating AI Portal Assistant Button and Chat Window -->
+<button id="aiFabBtn" class="ai-fab-btn" onclick="toggleAiChat()" aria-label="Open AI Assistant" style="display: none;"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:#d4af37;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg></button>
+
+<div id="aiChatWindow" class="ai-chat-window">
+  <div class="ai-chat-header">
+    <div class="ai-chat-header-title">
+      <span style="color:#d4af37; display: flex; align-items: center;"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span> Alpha AI Portal Assistant
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="ai-chat-status">
+        <span style="display: inline-block; width: 6px; height: 6px; background-color: #10b981; border-radius: 50%;"></span>
+        API Online
+      </div>
+      <button class="ai-chat-close" onclick="toggleAiChat()" aria-label="Close AI Assistant">&times;</button>
+    </div>
+  </div>
+  <div id="aiChatBody" class="ai-chat-body">
+    <!-- Messages get dynamically inserted here -->
+  </div>
+  <div id="aiChatToolbar" class="ai-chat-toolbar" style="display: flex; gap: 8px; padding: 6px 14px; background: rgba(0, 0, 0, 0.25); border-top: 1px solid rgba(255, 255, 255, 0.08); align-items: center; justify-content: space-between;">
+    <span id="aiActiveContextLabel" style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.5); font-weight: 500;">Context: General</span>
+    <button id="aiContextActionButton" class="ai-toolbar-btn" style="display: none; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.25); color: #e5c158; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="applyActiveContextAction()">Auto-Polish Draft</button>
+  </div>
+  <div class="ai-chat-input-area">
+    <input id="aiChatInput" class="ai-chat-input" type="text" placeholder="Ask anything about school or homework..." onkeydown="if(event.key==='Enter') sendAiChatMessage()">
+    <button id="aiChatSendBtn" class="ai-chat-send" onclick="sendAiChatMessage()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     INTERACTIVE SPLASH PREVIEW THEATER HTML
+   ════════════════════════════════════════════ -->
+<div id="splashTheaterOverlay" class="splash-theater-overlay" style="display: none;">
+  <div class="splash-theater-container">
+    
+    <!-- Left Panel: Interactive Viewport (Smartphone Mockup) -->
+    <div class="splash-theater-viewport">
+      
+      <!-- Back decoration / Floating particles in theater background -->
+      <div style="position: absolute; top: 10%; left: 10%; width: 120px; height: 120px; background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%); pointer-events: none;"></div>
+      <div style="position: absolute; bottom: 10%; right: 10%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events: none;"></div>
+
+      <div class="phone-mockup">
+        <div class="phone-notch">
+          <div class="phone-camera"></div>
+          <div class="phone-speaker"></div>
+        </div>
+        
+        <!-- Phone Screen Content -->
+        <div id="phoneScreen" class="phone-screen play-gold">
+          
+          <!-- Animation Canvas: Monolith Light Split (Redesigned 1) -->
+          <div id="canvasGold" class="splash-bg" style="display: flex;">
+            <div class="monolith-wrap">
+              <div class="monolith-logo-slot">
+                <div class="monolith-logo-circle">
+                  <img class="monolith-logo" src="/assets/logo-Btyu2gdc.png" alt="logo.png" referrerPolicy="no-referrer">
+                  <div class="monolith-logo-shimmer"></div>
+                </div>
+              </div>
+              <h1 class="monolith-title">ALPHA PORTAL</h1>
+              <p class="monolith-sub">RAS AL KHAIMAH</p>
+              <div class="monolith-crevice" style="margin-top: 24px;"></div>
+            </div>
+          </div>
+
+          <!-- Animation Canvas: Liquid Glass Morph (Redesigned 2) -->
+          <div id="canvasCosmic" class="splash-bg glassmorph-bg" style="display: none;">
+            <div class="fluid-sphere one"></div>
+            <div class="fluid-sphere two"></div>
+            <div style="z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+              <div class="glass-shield">
+                <div class="glass-shine"></div>
+                <!-- Custom geometric glowing crest inside the glass -->
+                <svg class="glass-logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold-light);">
+                  <polygon points="12 2 2 22 12 42 36 42 46 22 36 2" />
+                  <path d="M12 22h24" />
+                </svg>
+              </div>
+              <h1 class="glass-title">ALPHA PORTAL</h1>
+              <p class="glass-tagline">Institutions of Distinction</p>
+            </div>
+          </div>
+
+          <!-- Animation Canvas: Heritage Crest Drawing (Redesigned 3) -->
+          <div id="canvasKinetic" class="splash-bg" style="display: none; background: #07090e; justify-content: center; align-items: center;">
+            <div class="heritage-wrap">
+              <div class="crest-svg-container">
+                <div class="crest-outer-ring"></div>
+                <div class="crest-laurel-left"></div>
+                <div class="crest-laurel-right"></div>
+                <span class="crest-monogram">A</span>
+              </div>
+              <h1 class="heritage-title">ALPHA PORTAL</h1>
+              <p class="heritage-sub">ESTABLISHED 1986</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Controller & Publishing Checklist -->
+    <div class="splash-theater-sidebar">
+      <div class="sidebar-header">
+        <h2>✨ SPLASH DEMO</h2>
+        <button class="close-theater-btn" onclick="closeSplashDemo()">&times;</button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div style="display: flex; background: rgba(0,0,0,0.25); border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <button id="tabBtnControllers" class="nav-item active" style="flex: 1; text-align: center; padding: 12px; margin: 0; border-radius: 0; background: transparent; font-size: 0.85rem;" onclick="switchSplashTab('controllers')">
+          🎛️ Control Panel
+        </button>
+        <button id="tabBtnChecklist" class="nav-item" style="flex: 1; text-align: center; padding: 12px; margin: 0; border-radius: 0; background: transparent; font-size: 0.85rem;" onclick="switchSplashTab('checklist')">
+          📱 App Store Guide
+        </button>
+      </div>
+
+      <!-- Section A: Controllers Tab -->
+      <div id="splashTabControllers" class="sidebar-section" style="flex: 1; display: flex; flex-direction: column; overflow-y: auto;">
+        
+        <p style="font-size: 0.8rem; line-height: 1.4; color: rgba(255,255,255,0.6); margin-top: 0; margin-bottom: 20px;">
+          Preview custom cinematic welcome animations designed for native iOS App Store and Google Play Store builds.
+        </p>
+
+        <div class="sidebar-section" style="padding: 0; margin-bottom: 24px; border-bottom: none;">
+          <h3 class="section-title">1. Select Animation Concept</h3>
+          <button id="btnOptGold" class="preview-opt-btn active" onclick="changeSplashStyle('gold')">
+            <span style="font-size: 1.2rem;">🧱</span>
+            <div>
+              <div style="font-weight: 600; font-size: 0.85rem;">Monolith Light Split</div>
+              <div style="font-size: 0.72rem; color: rgba(255,255,255,0.45);">Razor thin crevice splits open, releasing neon gold emblem</div>
+            </div>
+          </button>
+          <button id="btnOptCosmic" class="preview-opt-btn" onclick="changeSplashStyle('cosmic')">
+            <span style="font-size: 1.2rem;">💎</span>
+            <div>
+              <div style="font-weight: 600; font-size: 0.85rem;">Liquid Glass Morph</div>
+              <div style="font-size: 0.72rem; color: rgba(255,255,255,0.45);">Specular ray sweep across frosted refractive glass shield</div>
+            </div>
+          </button>
+          <button id="btnOptKinetic" class="preview-opt-btn" onclick="changeSplashStyle('kinetic')">
+            <span style="font-size: 1.2rem;">🏛️</span>
+            <div>
+              <div style="font-weight: 600; font-size: 0.85rem;">Heritage Crest Drawing</div>
+              <div style="font-size: 0.72rem; color: rgba(255,255,255,0.45);">Classical double-ring seal with self-growing gold laurels</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="sidebar-section" style="padding: 0; margin-bottom: 24px; border-bottom: none;">
+          <h3 class="section-title">2. Accent Colors & Aura</h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="glass-btn secondary-btn" style="flex:1; padding: 6px; font-size: 0.75rem; border-color: rgba(201,168,76,0.3); color: var(--gold-light);" onclick="setSplashAccent('gold')">⚜️ Royal Gold</button>
+            <button class="glass-btn secondary-btn" style="flex:1; padding: 6px; font-size: 0.75rem; border-color: rgba(255,255,255,0.1);" onclick="setSplashAccent('emerald')">❇️ Platinum Jade</button>
+            <button class="glass-btn secondary-btn" style="flex:1; padding: 6px; font-size: 0.75rem; border-color: rgba(255,255,255,0.1);" onclick="setSplashAccent('purple')">🔮 Cosmic Orchid</button>
+          </div>
+        </div>
+
+        <div class="sidebar-section" style="padding: 0; margin-bottom: 15px; border-bottom: none; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+          <div>
+            <div style="font-size: 0.8rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 6px;">
+              🔊 Sound Chime Effect
+            </div>
+            <div style="font-size: 0.7rem; color: rgba(255,255,255,0.45);">Triggers a synthesized chime on play</div>
+          </div>
+          <label class="switch" style="position: relative; display: inline-block; width: 44px; height: 24px;">
+            <input type="checkbox" id="splashAudioToggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); transition: .3s; border-radius: 24px;"></span>
+          </label>
+        </div>
+
+        <div class="sidebar-footer" style="padding: 0; background: transparent; border-top: none; margin-top: auto;">
+          <button class="glass-btn primary-btn" style="width: 100%; padding: 12px; justify-content: center;" onclick="triggerSplashPlay()">
+            <span style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              Play Animation
+            </span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Section B: Checklist Tab -->
+      <div id="splashTabChecklist" class="sidebar-section" style="flex: 1; display: none; flex-direction: column; overflow-y: auto; padding: 20px;">
+        <h3 class="section-title" style="margin-bottom: 15px;">App Store & Play Store Roadmap</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.8rem; line-height: 1.45; color: rgba(255,255,255,0.85);">
+          
+          <div class="glass-panel" style="padding: 12px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+            <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>1️⃣</span> Convert to Native Hybrid Bundle
+            </div>
+            <p style="margin: 0; font-size: 0.75rem; color: rgba(255,255,255,0.65);">
+              Use **CapacitorJS** or **Apache Cordova** to wrap this web application. This bundles your HTML, CSS, and JS into a compiled native wrapper for iOS (Swift/Xcode) and Android (Kotlin/Gradle).
+            </p>
+          </div>
+
+          <div class="glass-panel" style="padding: 12px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+            <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>2️⃣</span> Register Store Developer Accounts
+            </div>
+            <ul style="margin: 0; padding-left: 16px; font-size: 0.72rem; color: rgba(255,255,255,0.65);">
+              <li>**Apple Developer Program:** $99/year (Requires D-U-N-S Number for institutional registration).</li>
+              <li>**Google Play Console:** $25 one-time registration fee.</li>
+            </ul>
+          </div>
+
+          <div class="glass-panel" style="padding: 12px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+            <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>3️⃣</span> Prepare Launch Assets
+            </div>
+            <p style="margin: 0; font-size: 0.75rem; color: rgba(255,255,255,0.65);">
+              Prepare app launcher icons (1024x1024 px), the splash screens (which will load instantly using our CSS animations), and device mockups showing active panels.
+            </p>
+          </div>
+
+          <div class="glass-panel" style="padding: 12px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06);">
+            <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>4️⃣</span> Submit for Store Review
+            </div>
+            <p style="margin: 0; font-size: 0.75rem; color: rgba(255,255,255,0.65);">
+              Compile the release build (`.ipa` for iOS and `.aab` bundle for Android), fill out App Store Privacy cards, and submit for verification (typically takes 24-72 hours).
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Scripts for the Splash Interactive Previewer -->
+<script>
+// Toggle switch visual helper for custom style checkbox
+document.addEventListener('DOMContentLoaded', () => {
+    const sw = document.querySelector('.switch input');
+    if (sw) {
+        sw.addEventListener('change', function() {
+            const slider = this.nextElementSibling;
+            if (this.checked) {
+                slider.style.backgroundColor = 'rgba(201, 168, 76, 0.4)';
+                slider.style.borderColor = 'var(--gold-light)';
+            } else {
+                slider.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                slider.style.borderColor = 'rgba(255,255,255,0.15)';
+            }
+        });
+    }
+});
+
+let currentSplashAccent = 'gold';
+
+function openSplashDemo() {
+    el('splashTheaterOverlay').style.display = 'flex';
+    triggerSplashPlay();
+}
+
+function closeSplashDemo() {
+    el('splashTheaterOverlay').style.display = 'none';
+}
+
+function switchSplashTab(tab) {
+    const cTab = el('splashTabControllers');
+    const clTab = el('splashTabChecklist');
+    const cBtn = el('tabBtnControllers');
+    const clBtn = el('tabBtnChecklist');
+    
+    if (tab === 'controllers') {
+        cTab.style.display = 'flex';
+        clTab.style.display = 'none';
+        cBtn.classList.add('active');
+        clBtn.classList.remove('active');
+    } else {
+        cTab.style.display = 'none';
+        clTab.style.display = 'flex';
+        cBtn.classList.remove('active');
+        clBtn.classList.add('active');
+    }
+}
+
+function changeSplashStyle(style) {
+    // Reset buttons
+    el('btnOptGold').classList.remove('active');
+    el('btnOptCosmic').classList.remove('active');
+    el('btnOptKinetic').classList.remove('active');
+    
+    // Reset canvases
+    el('canvasGold').style.display = 'none';
+    el('canvasCosmic').style.display = 'none';
+    el('canvasKinetic').style.display = 'none';
+    
+    const screen = el('phoneScreen');
+    screen.className = 'phone-screen'; // reset play state
+    
+    if (style === 'gold') {
+        el('btnOptGold').classList.add('active');
+        el('canvasGold').style.display = 'flex';
+        screen.classList.add('play-gold');
+    } else if (style === 'cosmic') {
+        el('btnOptCosmic').classList.add('active');
+        el('canvasCosmic').style.display = 'flex';
+        screen.classList.add('play-cosmic');
+    } else if (style === 'kinetic') {
+        el('btnOptKinetic').classList.add('active');
+        el('canvasKinetic').style.display = 'flex';
+        screen.classList.add('play-kinetic');
+    }
+    
+    triggerSplashPlay();
+}
+
+function setSplashAccent(color) {
+    currentSplashAccent = color;
+    
+    let hex = '#c9a84c'; // Default Gold
+    if (color === 'emerald') hex = '#4ecba1';
+    if (color === 'purple') hex = '#a14ecb';
+    
+    // 1. Monolith
+    const monolithCrevice = document.querySelector('.monolith-crevice');
+    const monolithLogo = document.querySelector('.monolith-logo');
+    const monolithLogoCircle = document.querySelector('.monolith-logo-circle');
+    if (monolithCrevice) monolithCrevice.style.background = `linear-gradient(90deg, transparent, #fff 30%, ${hex} 50%, #fff 70%, transparent)`;
+    if (monolithLogo) monolithLogo.style.filter = `drop-shadow(0 0 15px ${hex})`;
+    if (monolithLogoCircle) {
+        monolithLogoCircle.style.borderColor = `${hex}50`;
+        monolithLogoCircle.style.boxShadow = `0 0 25px ${hex}40, inset 0 0 10px ${hex}30`;
+    }
+    
+    // 2. Liquid Glass Morph
+    const glassSphereOne = document.querySelector('.fluid-sphere.one');
+    const glassLogo = document.querySelector('.glass-logo');
+    const glassTagline = document.querySelector('.glass-tagline');
+    if (glassSphereOne) glassSphereOne.style.background = `radial-gradient(circle, ${hex}40 0%, transparent 100%)`;
+    if (glassLogo) glassLogo.style.color = hex;
+    if (glassTagline) glassTagline.style.color = hex;
+    
+    // 3. Heritage Crest
+    const crestRing = document.querySelector('.crest-outer-ring');
+    const crestMonogram = document.querySelector('.crest-monogram');
+    const laurelLeft = document.querySelector('.crest-laurel-left');
+    const laurelRight = document.querySelector('.crest-laurel-right');
+    if (crestRing) crestRing.style.borderColor = `${hex}40`;
+    if (crestMonogram) {
+        crestMonogram.style.color = hex;
+        crestMonogram.style.textShadow = `0 0 12px ${hex}60`;
+    }
+    if (laurelLeft) laurelLeft.style.borderColor = hex;
+    if (laurelRight) laurelRight.style.borderColor = hex;
+    
+    triggerSplashPlay();
+}
+
+function triggerSplashPlay() {
+    const screen = el('phoneScreen');
+    if (!screen) return;
+    let currentStyle = 'gold';
+    if (el('btnOptCosmic') && el('btnOptCosmic').classList.contains('active')) currentStyle = 'cosmic';
+    if (el('btnOptKinetic') && el('btnOptKinetic').classList.contains('active')) currentStyle = 'kinetic';
+    
+    // Temporarily strip classes to re-trigger css keyframes
+    screen.className = 'phone-screen';
+    void screen.offsetWidth; // Force reflow
+    screen.classList.add(`play-${currentStyle}`);
+    
+    // Play synthesized sound if toggled
+    const audioToggle = el('splashAudioToggle');
+    if (audioToggle && audioToggle.checked) {
+        playSplashChime();
+    }
+}
+
+function playSplashChime() {
+    // Sound removed per user request
+    return;
+}
+
+// PWA: register the service worker so the app installs and works offline.
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch((err) => {
+            console.warn('Service worker registration failed:', err);
+        });
+    });
+}
+</script>
+
+<script>
+/* ── MOBILE BOTTOM TAB BAR — Student / Teacher / Parent only ──────────────
+   Admin & Principal keep the hamburger drawer (too many sections for a
+   bottom row). This block only reads the existing sidebar nav-items and
+   mirrors them into fixed bottom tabs; it never duplicates tab logic —
+   each bottom tab just clicks the real <li> underneath it.
+
+   Student also gets a "Profile" tab that groups My Profile / Report Cards /
+   Attendance Rate / Log Out into a popover sheet instead of 4 separate
+   bottom icons — keeps the bar to 5 items like a normal app. */
+
+const BOTTOM_BAR_ROLES = {
+  teacherSection: {
+    navSelector: '#teacherSection .sidebar-nav .nav-item',
+    hiddenIds: ['tchTabBtnMaterials', 'tchTabBtnHomework', 'tchTabBtnAttendance', 'tchTabBtnReports'] // merged into My Work
+  },
+  studentSection: {
+    navSelector: '#studentSection .sidebar-nav .nav-item',
+    hiddenIds: ['stdTabBtnRep', 'stdTabBtnAtt'] // reachable from inside the My Profile page instead
+  },
+  parentSection: { navSelector: '#parentSection .sidebar-nav .nav-item' }
+};
+
+let _bottomBarObserver = null;
+
+function getActiveBottomBarRoleId() {
+  for (const id of Object.keys(BOTTOM_BAR_ROLES)) {
+    const sec = document.getElementById(id);
+    if (sec && sec.style.display && sec.style.display !== 'none') return id;
+  }
+  return null;
+}
+
+function makeBottomTabButton(id, icon, label, onClick, extraClass) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'bottom-tab-item' + (extraClass ? ' ' + extraClass : '');
+  if (id) btn.setAttribute('data-src-id', id);
+  btn.setAttribute('aria-label', label);
+  btn.innerHTML = '<span class="bottom-tab-pill">' + (icon ? icon.outerHTML : '') + '<span class="bottom-tab-label">' + label + '</span></span>';
+  btn.addEventListener('click', onClick);
+  return btn;
+}
+
+function buildBottomTabBar() {
+  const bar = document.getElementById('bottomTabBar');
+  if (!bar) return;
+
+  try {
+    _buildBottomTabBarInner(bar);
+  } catch (err) {
+    console.error('buildBottomTabBar failed:', err);
+  }
+}
+
+function _buildBottomTabBarInner(bar) {
+  closeProfileSheet();
+
+  const roleId = getActiveBottomBarRoleId();
+  if (_bottomBarObserver) { _bottomBarObserver.disconnect(); _bottomBarObserver = null; }
+
+  if (!roleId) {
+    bar.innerHTML = '';
+    bar.classList.remove('visible');
+    document.body.classList.remove('has-bottom-tab-bar');
+    return;
+  }
+
+  const cfg = BOTTOM_BAR_ROLES[roleId];
+  const navItems = Array.from(document.querySelectorAll(cfg.navSelector));
+  if (navItems.length === 0) {
+    bar.innerHTML = '';
+    bar.classList.remove('visible');
+    document.body.classList.remove('has-bottom-tab-bar');
+    return;
+  }
+
+  bar.innerHTML = '';
+  const hiddenIds = new Set(cfg.hiddenIds || []);
+
+  navItems.forEach(li => {
+    if (hiddenIds.has(li.id)) return; // reachable from inside another tab's page instead
+
+    const icon = li.querySelector('.nav-icon svg');
+    const label = li.textContent.trim();
+    const btn = makeBottomTabButton(li.id, icon, label, () => {
+      const srcLi = document.getElementById(li.id);
+      if (srcLi) srcLi.click();
+    });
+    bar.appendChild(btn);
+  });
+
+  // Non-grouped roles keep Logout as its own final tab — the sidebar (and
+  // its own logout button) is hidden while this bar is active. Student's
+  // My Profile page has its own Logout button instead, so skip it here.
+  // Teacher's My Profile nav item now covers this too.
+  if (roleId !== 'studentSection' && roleId !== 'teacherSection') {
+    const logoutBtn = makeBottomTabButton(null, null, 'Log Out', () => {
+      if (typeof logoutSystem === 'function') logoutSystem();
+    });
+    logoutBtn.querySelector('.bottom-tab-pill').insertAdjacentHTML('afterbegin',
+      '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>');
+    bar.appendChild(logoutBtn);
+  }
+
+  bar.classList.add('visible');
+  document.body.classList.add('has-bottom-tab-bar');
+
+  const navList = document.querySelector(`#${roleId} .sidebar-nav`);
+  if (navList) {
+    _bottomBarObserver = new MutationObserver(() => syncBottomTabBarActiveState(roleId, hiddenIds));
+    _bottomBarObserver.observe(navList, { attributes: true, attributeFilter: ['class'], subtree: true });
+  }
+  syncBottomTabBarActiveState(roleId, hiddenIds);
+}
+
+function syncBottomTabBarActiveState(roleId, hiddenIds) {
+  const bar = document.getElementById('bottomTabBar');
+  if (!bar) return;
+  bar.querySelectorAll('.bottom-tab-item[data-src-id]').forEach(btn => {
+    const srcId = btn.getAttribute('data-src-id');
+    const srcLi = document.getElementById(srcId);
+    btn.classList.toggle('active', !!srcLi && srcLi.classList.contains('active'));
+
+    // Synchronize notification badges to mobile bottom pill
+    const pill = btn.querySelector('.bottom-tab-pill');
+    if (pill) {
+      let pillBadge = pill.querySelector('.bottom-tab-badge');
+      const srcBadge = srcLi ? srcLi.querySelector('.menu-badge, .nav-badge, #admNotificationBadge') : null;
+      const hasVisibleBadge = srcBadge && srcBadge.style.display !== 'none' && srcBadge.innerText && srcBadge.innerText.trim() !== '0' && srcBadge.innerText.trim() !== '';
+      if (hasVisibleBadge) {
+        if (!pillBadge) {
+          pillBadge = document.createElement('span');
+          pillBadge.className = 'bottom-tab-badge';
+          pill.appendChild(pillBadge);
+        }
+        pillBadge.textContent = srcBadge.innerText.trim();
+      } else if (pillBadge) {
+        pillBadge.remove();
+      }
+    }
+  });
+  // If Report Card / Attendance Rate got opened (via links inside the
+  // profile page) light up the Profile tab too, since that's where they
+  // now live for navigation purposes.
+  if (roleId === 'studentSection' && hiddenIds && hiddenIds.size) {
+    const profileBtn = bar.querySelector('.bottom-tab-item[data-src-id="stdTabBtnMe"]');
+    if (profileBtn) {
+      const anyHiddenActive = Array.from(hiddenIds).some(id => {
+        const el2 = document.getElementById(id);
+        return el2 && el2.classList.contains('active');
+      });
+      if (anyHiddenActive) profileBtn.classList.add('active');
+    }
+  }
+}
+
+/* Profile sheet helpers kept as no-ops for safety (nothing calls these
+   anymore now that Profile opens a full page), harmless if referenced. */
+function closeProfileSheet() {
+  const sheet = document.getElementById('profileTabSheet');
+  const overlay = document.getElementById('profileSheetOverlay');
+  if (sheet) sheet.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('profileSheetOverlay');
+  if (overlay) overlay.addEventListener('click', closeProfileSheet);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeProfileSheet(); });
+});
+
+/* Hook into the same show/hide patch already driving the hamburger, so the
+   bar rebuilds the moment a role's portal section opens or closes. */
+const _origShowForBottomBar = window.show;
+window.show = function(id) {
+  _origShowForBottomBar(id);
+  buildBottomTabBar();
+};
+const _origHideForBottomBar = window.hide;
+window.hide = function(id) {
+  _origHideForBottomBar(id);
+  buildBottomTabBar();
+};
+
+document.addEventListener('DOMContentLoaded', buildBottomTabBar);
+</script>
+
+<!-- ── GLOBAL EMERGENCY LIVE NOTIFICATION MODAL & MOBILE FLOATING TICKER ── -->
+<div id="mobileEmergencyFloatingTicker" class="mobile-emergency-ticker" style="display:none;"></div>
+<div id="globalEmergencyModal" class="emergency-modal-overlay" style="display:none;" onclick="if (event.target === this) closeEmergencyModal();"></div>
+
+</body>
+</html>

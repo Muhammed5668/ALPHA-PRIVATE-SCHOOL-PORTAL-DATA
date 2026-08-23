@@ -1,0 +1,8 @@
+{
+  "name": "Alpha Private School Portal",
+  "description": "Alpha Private School portal system for admins, teachers, students, and parents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

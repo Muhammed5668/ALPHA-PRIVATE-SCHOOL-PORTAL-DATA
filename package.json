@@ -1,0 +1,20 @@
+{
+  "name": "alpha-private-school-portal",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "mkdir -p public && cp app.js database.js logo.png public/ 2>/dev/null; vite --port 3000 --host",
+    "build": "mkdir -p public && cp app.js database.js logo.png public/ 2>/dev/null; vite build",
+    "preview": "vite preview --port 3000 --host",
+    "lint": "vite build"
+  },
+  "dependencies": {
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0"
+  },
+  "devDependencies": {
+    "vite": "^6.2.3"
+  }
+}
